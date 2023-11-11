@@ -1,8 +1,9 @@
-<script lang="ts" setup name="VbenForm">
-import { maps } from '#/index'
-import { computed, onMounted, ref, unref, useAttrs, watch } from 'vue'
-import { GridItemProps, VbenFormProps } from './type'
-import { set } from '@vben/utils'
+<script lang="ts" name="VbenForm" setup>
+import {maps} from '#/index'
+import {computed, onMounted, ref, unref, useAttrs, watch} from 'vue'
+import {GridItemProps, VbenFormProps} from './type'
+import {set} from '@vben/utils'
+
 const emit = defineEmits(['register', 'update:model'])
 const innerProps = ref<Partial<VbenFormProps>>()
 const Form = maps.get('Form')
@@ -34,22 +35,23 @@ const setProps = (prop: Partial<VbenFormProps>) => {
     ...unref(innerProps),
   }
 }
-const fieldValue = ref({})
+const fieldValue = ref(attrs.model)
 watch(
-  () => attrs.model,
-  () => {
-    const m = JSON.parse(JSON.stringify(attrs.model))
-    sObject(m)
-  },
-  { deep: true, immediate: true },
+    () => attrs.model,
+    () => {
+      const m = JSON.parse(JSON.stringify(attrs.model))
+      sObject(m)
+    },
+    {deep: true, immediate: true},
 )
 watch(
-  () => fieldValue,
-  () => {
-    emit('update:model', getFieldValue())
-  },
-  { deep: true },
+    () => fieldValue,
+    () => {
+      emit('update:model', getFieldValue())
+    },
+    {deep: true},
 )
+
 function sObject(m, key?) {
   Object.keys(m).forEach((k) => {
     const tempKey = key ? key + '.' + k : k
@@ -60,6 +62,7 @@ function sObject(m, key?) {
     // fieldValue.value[tempKey] = m[k]
   })
 }
+
 function getFieldValue() {
   const m = JSON.parse(JSON.stringify(fieldValue.value))
   Object.keys(m).forEach((k) => {
@@ -71,15 +74,16 @@ function getFieldValue() {
   })
   return m
 }
+
 // 默认gridItem参数
 const getGridItemProps = (p) => {
-  return { span: getGridProps.value.span, ...p }
+  return {span: getGridProps.value.span, ...p}
 }
 
 const getFormItemProps = (p) => {
-  const { labelProps } = p
+  const {labelProps} = p
 
-  return { ...labelProps }
+  return {...labelProps}
 }
 
 // 默认grid参数
@@ -111,68 +115,72 @@ onMounted(() => {
 <template>
   <div>
     <!--    {{ $attrs }}-->
-    <Form v-bind="$attrs" ref="formRef" :rules="getRules">
-      <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
+    <Form ref="formRef" :rules="getRules" v-bind="$attrs">
+      <template v-for="item in Object.keys($slots)" :key="item" #[item]="data">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
       <VbenGrid v-bind="getGridProps">
         <VbenGridItem
-          v-bind="getGridItemProps(schema.gridItemProps)"
-          v-for="(schema, key) in innerProps?.schemas"
-          :key="key"
-          :path="schema.field"
+            v-for="(schema, key) in innerProps?.schemas"
+            :key="key"
+            :path="schema.field"
+            v-bind="getGridItemProps(schema.gridItemProps)"
         >
           <VbenFormItem
-            :label="schema.label"
-            :path="schema.field"
-            :showRequireMark="schema.required"
-            :rule="schema.rule"
-            v-bind="getFormItemProps(schema)"
+              :label="schema.label"
+              :path="schema.field"
+              :rule="schema.rule"
+              :showRequireMark="schema.required"
+              v-bind="getFormItemProps(schema)"
           >
             <slot
-              :name="schema.slot"
-              v-if="schema.slot"
-              v-bind="{ m: fieldValue, field: schema.field }"
+                v-if="schema.slot"
+                :name="schema.slot"
+                v-bind="{ m: fieldValue, field: schema.field }"
             ></slot>
             <component
-              v-if="
+                v-if="
                 (schema.component !== 'InputPassword' ||
                   schema.component !== 'InputTextArea') &&
                 !schema.slot
               "
-              :is="`Vben${schema.component}`"
-              v-bind="schema.componentProps"
-              v-model:value="fieldValue[schema.field]"
+                v-model:value="fieldValue[schema.field]"
+                :is="`Vben${schema.component}`"
+                v-bind="schema.componentProps"
             />
             <VbenInput
-              type="password"
-              v-if="schema.component === 'InputPassword'"
-              v-bind="schema.componentProps"
-              v-model:value="fieldValue[schema.field]"
+                v-if="schema.component === 'InputPassword'"
+                v-model:value="fieldValue[schema.field]"
+                type="password"
+                v-bind="schema.componentProps"
             />
             <VbenInput
-              type="textarea"
-              v-if="schema.component === 'InputTextArea'"
-              v-bind="schema.componentProps"
-              v-model:value="fieldValue[schema.field]"
+                v-if="schema.component === 'InputTextArea'"
+                v-model:value="fieldValue[schema.field]"
+                type="textarea"
+                v-bind="schema.componentProps"
             />
           </VbenFormItem>
         </VbenGridItem>
         <VbenGridItem
-          v-if="innerProps?.schemas.length > 0 && innerProps.actions"
-          v-bind="innerProps.actionsProps"
+            v-if="innerProps?.schemas.length > 0 && innerProps.actions"
+            v-bind="innerProps.actionsProps"
         >
           <slot name="actions-prefix" v-bind="FormMethod || {}"></slot>
           <slot name="actions" v-bind="FormMethod || {}">
             <VbenButtonGroup
-              ><VbenButton type="error" @click="formRef.restoreValidation">{{
-                innerProps.actionsProps.cancelText || '重置'
-              }}</VbenButton>
+            >
+              <VbenButton type="error" @click="formRef.restoreValidation">{{
+                  innerProps.actionsProps.cancelText || '重置'
+                }}
+              </VbenButton>
               <VbenButton
-                type="primary"
-                @click="innerProps.submitFunc(FormMethod)"
-                >{{ innerProps.actionsProps.submitText || '提交' }}</VbenButton
-              ></VbenButtonGroup
+                  type="primary"
+                  @click="innerProps.submitFunc(FormMethod)"
+              >{{ innerProps.actionsProps.submitText || '提交' }}
+              </VbenButton
+              >
+            </VbenButtonGroup
             >
           </slot>
           <slot name="actions-suffix" v-bind="FormMethod || {}"></slot>

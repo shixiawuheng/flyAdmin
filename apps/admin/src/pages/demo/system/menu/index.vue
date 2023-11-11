@@ -23,19 +23,6 @@ const menuData: any = reactive({
     total: 0,
   },
 })
-// const treeTableData = reactive<>({})
-// const [menuTableReg, {}] = useTable({
-//   // title: '菜单列表',
-//   columns: menuColumns,
-//   pagination: true,
-//   border: 'inner',
-//   isTreeTable: true,
-//   treeConfig: {
-//     transform: true,
-//     rowField: 'id',
-//     parentField: 'parentId'
-//   }
-// })
 
 const menuAddDrawRef: any = ref(null)
 function handleMenuAddDraw() {

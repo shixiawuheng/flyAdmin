@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-import { useForm } from '@vben/vbencomponents'
+import {onMounted, ref} from 'vue'
+import {useForm} from '@vben/vbencomponents'
 
-import { transferFormilySchemas } from '@vben/vbencomponents/src/form'
-import { FormilyProps, BasicProps, selectParams } from './schemas'
+import {transferFormilySchemas} from '@vben/vbencomponents/src/form'
+import {FormilyProps, BasicProps, selectParams} from './schemas'
 
 const Ref = ref(null)
 
-const [register, { getFieldValue, validate }] = useForm({
+const [register, {getFieldValue, validate}] = useForm({
   actions: true,
   actionsProps: {
     span: 12,
@@ -30,16 +30,11 @@ const [register, { getFieldValue, validate }] = useForm({
   },
 })
 const changeSelectParams = () => {
-  selectParams.value = { id: 2 }
+  console.log(model.value)
 }
 const model = ref({
-  haha: '11',
-  user: {
-    age: '22',
-    name: '',
-  },
+  name: "111",
 })
-const value = ref()
 
 function getValue() {
   validate()
@@ -52,6 +47,6 @@ function getValue() {
 
     <VbenButton @click="changeSelectParams">改变选择框参数</VbenButton>
     <VbenButton @click="getValue">获取数据</VbenButton>
-    <VbenForm @register="register" ref="Ref" v-model:model="model" />
+    <VbenForm ref="Ref" v-model:model="model" @register="register"/>
   </div>
 </template>

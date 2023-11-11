@@ -2,7 +2,12 @@ import {request} from '@vben/request'
 import {ErrorMessageMode} from "@vben/types";
 
 export interface order_type {
-
+    id?: number,
+    note: string,
+    money: number,
+    level: number,
+    name: string,
+    script: string
 }
 
 
@@ -25,6 +30,21 @@ export async function api_levels(
     return request.get<order_type[]>(
         {
             url: '/order/levels',
+        },
+        {
+            errorMessageMode: mode,
+        },
+    )
+}
+
+export async function api_addType(
+    params: order_type,
+    mode: ErrorMessageMode = 'modal',
+) {
+    return request.post<null>(
+        {
+            url: '/order/addType',
+            params,
         },
         {
             errorMessageMode: mode,

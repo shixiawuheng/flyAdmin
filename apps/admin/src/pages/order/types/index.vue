@@ -1,21 +1,35 @@
 <script lang="ts" setup>
 import {computed, ref} from 'vue'
-import {api_types} from '@/apis/order'
+import {api_types, api_addType, order_type} from '@/apis/order'
 import {baseColumns} from './schemas'
 // import TModel from './model/edit.vue'
+import MenuAddDraw from './model/menuAddDraw.vue'
 
 let loading = ref(false)
 const reload = function () {
+  loading.value = true
   api_types().then(res => {
     data.value = res
-  })
+  }).finally(() => loading.value = false)
 }
 reload()
 const data = ref([])
 const Height = computed(() => window.innerHeight - 165)
+const menuAddDrawRef = ref()
 
-async function handleCreate(e) {
-  // max-height: calc(100vh - 120px);
+function handleCreate() {
+  menuAddDrawRef.value.open({title: "创建订单种类", api: api_addType})
+}
+
+function handleEdit(a, b, c, d) {
+  console.log(a, b, c, d)
+  // menuAddDrawRef.value.open({title: "创建订单种类", api: api_addType})
+}
+
+function HandleSuccess() {
+  console.log("成功")
+  reload()
+  menuAddDrawRef.value.close()
 }
 
 </script>
@@ -39,7 +53,7 @@ async function handleCreate(e) {
         </div>
       </template>
       <template #action>
-        <VbenButton secondary size="tiny" strong type="primary">
+        <VbenButton secondary size="tiny" strong type="primary" @click="handleEdit">
           编辑
         </VbenButton>
       </template>
@@ -53,6 +67,6 @@ async function handleCreate(e) {
       <!--        <slot :name="item" v-bind="data || {}"></slot>-->
       <!--      </template>-->
     </VbenTable>
-    <!--    <TModel :show="true" :title="编辑账号"/>-->
+    <MenuAddDraw ref="menuAddDrawRef" @success="HandleSuccess"/>
   </div>
 </template>

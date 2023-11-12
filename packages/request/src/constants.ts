@@ -2,30 +2,31 @@
  * @description: Request result set
  */
 export enum ResultEnum {
-  SUCCESS = 1,
-  ERROR = 0,
-  TIMEOUT = 401,
-  TYPE = 'success',
+    Captcha = -1,
+    SUCCESS = 1,
+    ERROR = 0,
+    TIMEOUT = 401,
+    TYPE = 'success',
 }
 
 /**
  * @description: request method
  */
 export enum RequestEnum {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  DELETE = 'DELETE',
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    DELETE = 'DELETE',
 }
 
 /**
  * @description: contentType
  */
 export enum ContentTypeEnum {
-  // json
-  JSON = 'application/json;charset=UTF-8',
-  // form-data qs
-  FORM_URLENCODED = 'application/x-www-form-urlencoded;charset=UTF-8',
-  // form-data  upload
-  FORM_DATA = 'multipart/form-data;charset=UTF-8',
+    // json
+    JSON = 'application/json;charset=UTF-8',
+    // form-data qs
+    FORM_URLENCODED = 'application/x-www-form-urlencoded;charset=UTF-8',
+    // form-data  upload
+    FORM_DATA = 'multipart/form-data;charset=UTF-8',
 }

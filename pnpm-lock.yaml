@@ -181,6 +181,124 @@ importers:
         specifier: ^1.8.20
         version: 1.8.20(typescript@5.2.2)
 
+  apps/client:
+    dependencies:
+      '@ant-design/icons-vue':
+        specifier: ^7.0.1
+        version: 7.0.1(vue@3.3.6)
+      '@config/vite':
+        specifier: workspace:*
+        version: link:../../configs/vite
+      '@iconify/iconify':
+        specifier: ^3.1.1
+        version: 3.1.1
+      '@vben/components':
+        specifier: workspace:*
+        version: link:../../packages/components
+      '@vben/constants':
+        specifier: workspace:*
+        version: link:../../packages/constants
+      '@vben/demo':
+        specifier: workspace:*
+        version: link:../../packages/demo
+      '@vben/directives':
+        specifier: workspace:*
+        version: link:../../packages/directives
+      '@vben/grid-layouts':
+        specifier: workspace:*
+        version: link:../../packages/grid-layouts
+      '@vben/hooks':
+        specifier: workspace:*
+        version: link:../../packages/hooks
+      '@vben/layouts':
+        specifier: workspace:*
+        version: link:../../packages/layouts
+      '@vben/locale':
+        specifier: workspace:*
+        version: link:../../packages/locale
+      '@vben/request':
+        specifier: workspace:*
+        version: link:../../packages/request
+      '@vben/router':
+        specifier: workspace:*
+        version: link:../../packages/router
+      '@vben/stores':
+        specifier: workspace:*
+        version: link:../../packages/stores
+      '@vben/styles':
+        specifier: workspace:*
+        version: link:../../packages/styles
+      '@vben/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
+      '@vben/vbencomponents':
+        specifier: workspace:*
+        version: link:../../packages/vbenComponents
+      '@vueuse/core':
+        specifier: ^10.5.0
+        version: 10.5.0(vue@3.3.6)
+      crypto-js:
+        specifier: ^4.2.0
+        version: 4.2.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.10
+      echarts:
+        specifier: ^5.4.3
+        version: 5.4.3
+      mockjs:
+        specifier: ^1.1.0
+        version: 1.1.0
+      monaco-editor:
+        specifier: ^0.44.0
+        version: 0.44.0
+      pinia:
+        specifier: 2.1.7
+        version: 2.1.7(typescript@5.2.2)(vue@3.3.6)
+      vue:
+        specifier: 3.3.6
+        version: 3.3.6(typescript@5.2.2)
+      vue-demi:
+        specifier: ^0.14.6
+        version: 0.14.6(vue@3.3.6)
+      vue-echarts:
+        specifier: ^6.6.1
+        version: 6.6.1(echarts@5.4.3)(vue@3.3.6)
+      vue-router:
+        specifier: ^4.2.5
+        version: 4.2.5(vue@3.3.6)
+    devDependencies:
+      '@config/css-preprocess':
+        specifier: workspace:*
+        version: link:../../configs/css-preprocess
+      '@types/mockjs':
+        specifier: ^1.0.9
+        version: 1.0.9
+      '@types/nprogress':
+        specifier: ^0.2.2
+        version: 0.2.2
+      '@vben/types':
+        specifier: workspace:*
+        version: link:../../packages/types
+      '@vue/compiler-sfc':
+        specifier: 3.3.6
+        version: 3.3.6
+      '@vue/test-utils':
+        specifier: ^2.4.1
+        version: 2.4.1(vue@3.3.6)
+      naive-ui:
+        specifier: ^2.35.0
+        version: 2.35.0(vue@3.3.6)
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      vite:
+        specifier: 4.5.0
+        version: 4.5.0(@types/node@20.8.8)(less@4.2.0)(terser@5.22.0)
+      vue-tsc:
+        specifier: ^1.8.20
+        version: 1.8.20(typescript@5.2.2)
+
   configs/css-preprocess:
     dependencies:
       postcss:

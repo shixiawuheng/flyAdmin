@@ -27,7 +27,10 @@ const formData = reactive({
   captcha: "",
 });
 const isCaptcha = ref(false)
-const captchaUrl = "/basic-api/captcha"
+let captchaUrl = "/basic-api/captcha"
+if (import.meta.env.MODE != "development") {
+  captchaUrl = "/captcha"
+}
 const captcha = ref(captchaUrl)
 const handleCaptcha = () => {
   captcha.value = captchaUrl + `?t=${Date.now()}&reload=true`

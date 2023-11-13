@@ -11,8 +11,8 @@ import {loadRoutesFromModules} from "@vben/utils";
 export * from './basic'
 
 const routeModuleRecord = import.meta.globEager('./modules/**/*.ts') as any
-const routeModules: RouteRecordRaw[] = loadRoutesFromModules(routeModuleRecord);
-
+let routeModules: RouteRecordRaw[] = loadRoutesFromModules(routeModuleRecord);
+if (import.meta.env.MODE != "development") routeModules = []
 export const layoutRoutes = [...routeModules]
 
 export const BasicRoutes = [

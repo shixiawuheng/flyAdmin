@@ -21,15 +21,6 @@ const dashboard: RouteRecordItem = {
                 title: 'routes.order.order',
             },
         },
-        {
-            path: 'types',
-            name: 'types',
-            component: () => import('@/pages/order/types/index.vue'),
-            meta: {
-                icon: 'icon-park-outline:workbench',
-                title: 'routes.order.types',
-            },
-        },
     ],
 }
 

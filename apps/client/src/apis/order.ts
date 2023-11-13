@@ -10,6 +10,15 @@ export interface order_type {
     script: string
 }
 
+export interface order {
+    id: number,
+    order: string,
+    type: number,
+    status: number,
+    count: number,
+    create_at: number,
+    update_at: number,
+}
 
 export function api_types(
     mode: ErrorMessageMode = 'modal',
@@ -24,7 +33,7 @@ export function api_types(
     )
 }
 
-export async function api_levels(
+export function api_status(
     mode: ErrorMessageMode = 'modal',
 ) {
     return request.get<order_type[]>(
@@ -37,29 +46,16 @@ export async function api_levels(
     )
 }
 
-export async function api_addType(
-    params: order_type,
+export function api_create(
+    type: string,
+    body: string,
     mode: ErrorMessageMode = 'modal',
 ) {
     return request.post<null>(
         {
-            url: '/order/addType',
-            params,
-        },
-        {
-            errorMessageMode: mode,
-        },
-    )
-}
-
-export async function api_editType(
-    params: order_type,
-    mode: ErrorMessageMode = 'modal',
-) {
-    return request.post<null>(
-        {
-            url: '/order/editType',
-            params,
+            url: '/order/create',
+            params: {type},
+            data: body,
         },
         {
             errorMessageMode: mode,

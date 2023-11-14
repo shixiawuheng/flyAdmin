@@ -1,5 +1,5 @@
 import {VbenFormSchema} from '@vben/vbencomponents/src/form'
-// import {types} from '../schemas'
+import {types} from '../schemas'
 
 export const menuAddSchema: VbenFormSchema[] = [
     {
@@ -9,37 +9,17 @@ export const menuAddSchema: VbenFormSchema[] = [
         required: true,
         gridItemProps: {span: 24},
         componentProps: {
-            // api: () => {
-            //     return new Promise((resolve, reject) => {
-            //         types.then((val) => {
-            //             debugger;
-            //             console.log(val)
-            //             resolve()
-            //         }).catch(reject)
-            //     })
-            //
-            // }
-        },
-    },
-    {
-        field: 'money',
-        label: '单价',
-        component: 'InputNumber',
-        gridItemProps: {span: 24},
-        // labelProps: {
-        //     labelPlacement: 'left',
-        // },
-        componentProps: {
-            placeholder: '请输入',
-        },
-    },
-    {
-        field: 'script',
-        label: '脚本',
-        component: 'InputTextArea',
-        gridItemProps: {span: 24},
-        componentProps: {
-            placeholder: '请输入',
+            api: () => {
+                return new Promise((resolve, _) => {
+                    const options = types.map(item => {
+                        return {
+                            label: item.name,
+                            value: item.id,
+                        }
+                    })
+                    resolve({options})
+                })
+            },
         },
     },
     {
@@ -47,9 +27,18 @@ export const menuAddSchema: VbenFormSchema[] = [
         label: '备注',
         component: 'InputTextArea',
         gridItemProps: {span: 24},
-        required: false,
         componentProps: {
             placeholder: '请输入',
+        },
+    },
+    {
+        field: 'body',
+        label: '提交数据',
+        component: 'InputTextArea',
+        gridItemProps: {span: 24},
+        required: true,
+        componentProps: {
+            placeholder: '请输入或拖动文件到此处',
         },
     }
 ]

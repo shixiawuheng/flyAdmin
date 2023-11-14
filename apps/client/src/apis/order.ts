@@ -20,6 +20,12 @@ export interface order {
     update_at: number,
 }
 
+export interface ScriptResult {
+    success: string[],
+    error: string[],
+    count: number,
+}
+
 export function api_types(
     mode: ErrorMessageMode = 'modal',
 ) {
@@ -33,12 +39,25 @@ export function api_types(
     )
 }
 
+export function api_base(
+    mode: ErrorMessageMode = 'modal',
+) {
+    return request.get(
+        {
+            url: '/order/base',
+        },
+        {
+            errorMessageMode: mode,
+        },
+    )
+}
+
 export function api_status(
     mode: ErrorMessageMode = 'modal',
 ) {
     return request.get<order_type[]>(
         {
-            url: '/order/levels',
+            url: '/order/status',
         },
         {
             errorMessageMode: mode,
@@ -47,15 +66,32 @@ export function api_status(
 }
 
 export function api_create(
-    type: string,
+    type: number,
     body: string,
     mode: ErrorMessageMode = 'modal',
 ) {
     return request.post<null>(
         {
-            url: '/order/create',
-            params: {type},
+            url: '/order/create?type=' + type,
             data: body,
+            headers: {
+                ['Content-Type']: "text/plain"
+            }
+        },
+        {
+            errorMessageMode: mode,
+        },
+    )
+}
+
+export function api_list(
+    data,
+    mode: ErrorMessageMode = 'modal',
+) {
+    return request.post<order[]>(
+        {
+            url: '/order/list',
+            data
         },
         {
             errorMessageMode: mode,

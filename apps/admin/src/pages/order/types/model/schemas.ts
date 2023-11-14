@@ -1,5 +1,4 @@
 import {VbenFormSchema} from '@vben/vbencomponents/src/form'
-// import {api_levels} from "@/apis/order";
 import {levels} from '../schemas'
 
 export const menuAddSchema: VbenFormSchema[] = [
@@ -28,21 +27,23 @@ export const menuAddSchema: VbenFormSchema[] = [
         //     labelPlacement: 'left',
         // },
         componentProps: {
-            options: Object.keys(levels).map(item => {
-                return {
-                    label: levels[item],
-                    value: item,
-                }
-            }),
-            // api: async () => {
-            //     const levels = await api_levels()
-            //     return Object.keys(levels).map(item => {
-            //         return {
-            //             label: levels[item],
-            //             value: item,
-            //         }
-            //     })
-            // }
+            // options: Object.keys(levels).map(item => {
+            //     return {
+            //         label: levels[item],
+            //         value: item,
+            //     }
+            // }),
+            api: () => {
+                return new Promise((resolve, _) => {
+                    const options = Object.keys(levels).map(item => {
+                        return {
+                            label: levels[item],
+                            value: item,
+                        }
+                    })
+                    resolve({options})
+                })
+            }
         },
     },
     {

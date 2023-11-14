@@ -13,7 +13,6 @@ import {registerComponents} from '../init-components'
 (async () => {
     const app = createApp(App)
     setupPinia(app)
-
     // Register Global Components
     await registerComponents(app)
 

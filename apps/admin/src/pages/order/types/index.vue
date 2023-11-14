@@ -2,7 +2,7 @@
 import {ref, unref} from 'vue'
 import {api_types, api_addType, api_editType} from '@/apis/order'
 import {baseColumns} from './schemas'
-// import TModel from './model/edit.vue'
+
 import MenuAddDraw from './model/menuAddDraw.vue'
 
 let loading = ref(false)

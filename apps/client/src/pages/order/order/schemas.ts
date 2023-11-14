@@ -1,8 +1,9 @@
 import {VbenColumns} from '@vben/vbenComponents/src/table'
-import {api_status, api_types} from "@/apis/order";
+import {api_base} from "@/apis/order";
+import dayjs from "dayjs";
 
 function timeFormatter({cellValue}) {
-    return cellValue
+    return dayjs(cellValue * 1000).format("YYYY-MM-DD HH:mm:ss")
 }
 
 export interface Data {
@@ -31,25 +32,39 @@ export const baseColumns: VbenColumns = [
         width: '8%',
         sortable: true,
         align: 'center',
+        formatter: function ({cellValue}) {
+            const t = types.find((item) => item.id == cellValue)
+            if (t) {
+                return t.name
+            }
+            return "未知类型!请刷新网页重试"
+        },
     },
     {
         field: 'status',
         title: '订单状态',
         align: 'center',
         width: '8%',
-        // formatter: function ({cellValue}) {
-        //     return status[cellValue]
-        // },
+        formatter: function ({cellValue}) {
+            return status[cellValue]
+        },
     },
     {
-        field: 'create_at',
+        field: 'count',
+        title: '数量',
+        width: '8%',
+        sortable: true,
+        align: 'center',
+    },
+    {
+        field: 'createAt',
         title: '创建时间',
         align: 'center',
         showOverflow: true,
         formatter: timeFormatter,
     },
     {
-        field: 'update_at',
+        field: 'updateAt',
         title: '更新时间',
         align: 'center',
         showOverflow: true,
@@ -68,9 +83,20 @@ export const baseColumns: VbenColumns = [
     }
 ]
 
-// export const status = (async function () {
-//     return await api_status()
-// })()
-// export const types = (async function () {
-//     return await api_types()
-// })()
+// export let status = new Proxy({}, {
+//     get: async function (target, property) {
+//         if (Object.keys(target).length < 1) await GetStatus()
+//         return target[property]
+//     }
+// });
+export let status = {}
+
+export let types = []
+
+export async function Base() {
+    const base = await api_base()
+    types = base.list
+    status = base.status
+}
+
+Base()

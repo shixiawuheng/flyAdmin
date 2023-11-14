@@ -1,34 +1,33 @@
 <script lang="ts" setup>
-import {ref, defineExpose, reactive, unref} from 'vue'
-import {useForm} from "@vben/vbencomponents";
-import {menuAddSchema} from "./schemas";
-import {order_type} from "@/apis/order";
-import {notice} from '@vben/vbencomponents'
+import {ref, defineExpose, reactive, watch, nextTick} from 'vue'
+import {order_type, ScriptResult, api_create} from "@/apis/order";
+import {msg, notice} from '@vben/vbencomponents'
+import {types} from '../schemas'
+import successList from '@/pages/common/successList.vue'
+import errorList from '@/pages/common/errorList.vue'
 
 const menuDrawerFlag = ref(false)
 const DrawerData = reactive({
-  title: '新增类型'
+  title: '新增类型',
 })
-let submitApi = null
+let IndexType: order_type | undefined
+const step = ref<"load" | "success" | "error">("load")
 
 function open(prop) {
   prop = prop || {}
-  const {title, data, api} = prop
-  submitApi = api
+  const {title, data} = prop
   model.value = {
-    money: 1,
-    level: '1',
-    name: '',
-    note: '',
-    script: `return function (body) {let arr = body.split("\\n"); if (arr.length == 2) return arr.length}`,
+    type: undefined,
+    body: "aaa----1111",
     ...data,
   }
-  model.value.level = model.value.level.toString()
-  DrawerData.title = title || "未知"
+  DrawerData.title = title || "创建订单"
+  step.value = "load"
   return (menuDrawerFlag.value = true)
 }
 
 function close() {
+  model.value.type = void 0
   return (menuDrawerFlag.value = false)
 }
 
@@ -37,67 +36,185 @@ defineExpose({
   open,
   close,
 })
-const model = ref<order_type>({
-  money: 1,
-  level: '1',
-  name: '',
-  note: '',
-  script: `return function (body) {
-  let arr = body.split("\\n");
-  if (arr.length == 2) return arr.length
-}`
+const model = ref({
+  type: undefined,
+  note: "",
+  body: "",
 })
+const DropLoading = ref(false)
+const loading = ref(false)
+const success = ref([])
+const error = ref([])
+watch(() => step.value, (value => {
+  switch (value) {
+    case "load":
+      return DrawerData.title = "创建订单"
+    case "success":
+      return DrawerData.title = "检查数据"
+    case "error":
+      return DrawerData.title = "发生错误!!!"
+    default:
+      return DrawerData.title = "未知页"
+  }
+}))
 
-const loading = ref(true)
-
-function ScriptCheck(script: string): Promise<string> {
+function ScriptCheck(Script: string, Body: string): Promise<ScriptResult> {
   return new Promise((resolve, reject) => {
     try {
-      console.log(script)
-      const Func = new Function(script)()
-      if (typeof Func != "function") {
-        throw new Error("脚本返回值有误不是函数! " + typeof Func)
+      const worker = new Worker("/worker.js");
+      worker.postMessage({Script, Body})
+      worker.onmessage = (result) => {
+        if (result.data) {
+          resolve(result.data)
+        } else {
+          reject(new Error("脚本解析错误!请检查格式!"))
+        }
+        worker.terminate();
       }
-      resolve(script)
     } catch (e) {
-      notice.error({content: "脚本有误", meta: e.message, duration: 1500})
       reject(e)
     }
   })
 }
 
-const [menuFormReg] = useForm({
-  actions: true,
-  schemas: menuAddSchema,
-  actionsProps: {
-    span: 24,
-    submitText: '确定',
-  },
-  submitFunc: (from) => {
-    loading.value = true
-    from?.validate().then(async () => {
-      const value = unref(model.value)
-      value.script = await ScriptCheck(value.script);
-      value.level = Number(value.level)
-      console.log(value)
-      submitApi && await submitApi(value) == null || alert("未接受到提交函数")
-      emit('success')
-      setTimeout(() => notice.success({content: "提交成功!", duration: 1500}), 500)
-    }).finally(() => loading.value = false)
-  },
+function handleTypeOptions() {
+  return new Promise((resolve, _) => {
+    const options = types.map(item => {
+      return {
+        label: item.name,
+        value: item.id,
+      }
+    })
+    resolve({options})
+  })
+}
 
+watch(() => model.value.type, (value) => {
+  if (value == void 0) return
+  const obj = types.find((item) => {
+    return item.id == value
+  })
+  model.value.note = obj.note
+  IndexType = obj
 })
 
+function ShowErr() {
+  step.value = "error"
+}
+
+function ShowSuccess() {
+  step.value = "success"
+}
+
+function handlePost() {
+  const type = IndexType?.id
+  if (!type) {
+    msg.error("订单类型异常");
+    close();
+    return;
+  }
+  const body = success.value.join("\n")
+  if (body.length < 1) {
+    msg.warning("订单内容异常!")
+    return;
+  }
+  loading.value = true
+  api_create(type, body).then((order) => {
+    emit("success", order)
+  }).finally(() => loading.value = false)
+}
+
+function handleSubmit() {
+  if (!model.value.type || !IndexType) {
+    notice.error({
+      content: '提交错误!',
+      meta: '类型不可为空',
+      duration: 2500,
+      keepAliveOnHover: true
+    })
+    return
+  }
+  loading.value = true
+  ScriptCheck(IndexType.script, model.value.body)
+      .then(res => {
+        success.value = res.success
+        error.value = res.error
+        if (res.error.length != 0) {
+          return ShowErr()
+        }
+        ShowSuccess()
+      })
+      .catch(e => notice.error({
+        content: '提交错误!',
+        meta: e.message,
+        duration: 2500,
+        keepAliveOnHover: true
+      })).finally(() => loading.value = false)
+}
+
+function handleDrop(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  if (e.dataTransfer.files.length === 0) return
+  const files = e.dataTransfer.files;
+  const reader = new FileReader();
+  DropLoading.value = true
+  reader.onload = function (e) {
+    model.value.body = e.target.result as string
+    DropLoading.value = false
+  };
+  nextTick(() => reader.readAsText(files[0]))
+}
+
+function handleDropEnter(e) {
+  e.stopPropagation();
+  e.preventDefault();
+}
 </script>
 <template>
   <VbenDrawer
-      v-model:show="menuDrawerFlag" :loading="loading" :mask-closable="true" :width="500"
+      v-model:show="menuDrawerFlag" :mask-closable="true" :width="800"
       placement="right">
     <VbenDrawerContent closable>
       <template #header>{{ DrawerData.title }}</template>
-      <VbenForm ref="menuFormRef" v-model:model="model" class="w-full" @register="menuFormReg"/>
+      <vben-form v-if="step==='load'" v-model:model="model">
+        <vben-form-item class="enter-x" inline label="类型">
+          <vben-select
+              v-model:value="model.type"
+              :api="handleTypeOptions"
+          />
+        </vben-form-item>
+        <vben-form-item v-show="model.type" :show-label="false" class="enter-x" inline>
+          <vben-alert type="warning">
+            <pre style="margin-top: -2px;margin-bottom: 0">{{ model.note }}</pre>
+          </vben-alert>
+        </vben-form-item>
+        <vben-form-item
+            class="enter-x" inline
+            label="提交数据"
+            @dragenter="handleDropEnter"
+            @drop="handleDrop">
+          <vben-input
+              v-model:value="model.body"
+              :loading="DropLoading"
+              placeholder="你可以选择复制粘贴过来 或者 将文件拖动到此处"
+              type="textarea"
+          />
+        </vben-form-item>
+        <vben-form-item class="enter-x" inline>
+          <vben-button
+              :loading="loading"
+              block
+              size="large"
+              type="primary"
+              @click="handleSubmit"
+          >
+            {{ loading ? "处理中" : "下一步" }}
+          </vben-button>
+        </vben-form-item>
+      </vben-form>
+      <successList v-if="step==='success'" :data="success" :loading="loading" @success="handlePost"/>
+      <errorList v-if="step==='error'" :data="error" :loading="loading" @success="ShowSuccess"/>
     </VbenDrawerContent>
   </VbenDrawer>
 </template>
-
-<style lang="less" scoped></style>

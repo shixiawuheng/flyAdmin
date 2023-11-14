@@ -39,7 +39,7 @@ const titleClass = computed(() => {
   return {
     backgroundColor:
         appStore.getDarkMode === ThemeEnum.DARK ? '#262626' : '#FFF',
-    
+
   }
 })
 const props = defineProps({

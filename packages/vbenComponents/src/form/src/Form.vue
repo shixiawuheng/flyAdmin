@@ -113,81 +113,80 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div>
-    <!--    {{ $attrs }}-->
-    <Form ref="formRef" :rules="getRules" v-bind="$attrs">
-      <template v-for="item in Object.keys($slots)" :key="item" #[item]="data">
-        <slot :name="item" v-bind="data || {}"></slot>
-      </template>
-      <VbenGrid v-bind="getGridProps">
-        <VbenGridItem
-            v-for="(schema, key) in innerProps?.schemas"
-            :key="key"
+  <!--  {{ getRules }}-->
+  <Form ref="formRef" :rules="getRules" v-bind="$attrs">
+
+    <template v-for="item in Object.keys($slots)" :key="item" #[item]="data">
+      <slot :name="item" v-bind="data || {}"></slot>
+    </template>
+    <VbenGrid v-bind="getGridProps">
+      <VbenGridItem
+          v-for="(schema, key) in innerProps?.schemas"
+          :key="key"
+          :path="schema.field"
+          v-bind="getGridItemProps(schema.gridItemProps)"
+      >
+        <VbenFormItem
+            :label="schema.label"
             :path="schema.field"
-            v-bind="getGridItemProps(schema.gridItemProps)"
+            :rule="schema.rule"
+            :showRequireMark="schema.required"
+            v-bind="getFormItemProps(schema)"
         >
-          <VbenFormItem
-              :label="schema.label"
-              :path="schema.field"
-              :rule="schema.rule"
-              :showRequireMark="schema.required"
-              v-bind="getFormItemProps(schema)"
-          >
-            <slot
-                v-if="schema.slot"
-                :name="schema.slot"
-                v-bind="{ m: fieldValue, field: schema.field }"
-            ></slot>
-            <component
-                v-if="
+          <slot
+              v-if="schema.slot"
+              :name="schema.slot"
+              v-bind="{ m: fieldValue, field: schema.field }"
+          ></slot>
+          <component
+              v-if="
                 (schema.component !== 'InputPassword' ||
                   schema.component !== 'InputTextArea') &&
                 !schema.slot
               "
-                v-model:value="fieldValue[schema.field]"
-                :is="`Vben${schema.component}`"
-                v-bind="schema.componentProps"
-            />
-            <VbenInput
-                v-if="schema.component === 'InputPassword'"
-                v-model:value="fieldValue[schema.field]"
-                type="password"
-                v-bind="schema.componentProps"
-            />
-            <VbenInput
-                v-if="schema.component === 'InputTextArea'"
-                v-model:value="fieldValue[schema.field]"
-                type="textarea"
-                v-bind="schema.componentProps"
-            />
-          </VbenFormItem>
-        </VbenGridItem>
-        <VbenGridItem
-            v-if="innerProps?.schemas.length > 0 && innerProps.actions"
-            v-bind="innerProps.actionsProps"
-        >
-          <slot name="actions-prefix" v-bind="FormMethod || {}"></slot>
-          <slot name="actions" v-bind="FormMethod || {}">
-            <VbenButtonGroup
+              v-model:value="fieldValue[schema.field]"
+              :is="`Vben${schema.component}`"
+              v-bind="schema.componentProps"
+          />
+          <VbenInput
+              v-if="schema.component === 'InputPassword'"
+              v-model:value="fieldValue[schema.field]"
+              type="password"
+              v-bind="schema.componentProps"
+          />
+          <VbenInput
+              v-if="schema.component === 'InputTextArea'"
+              v-model:value="fieldValue[schema.field]"
+              type="textarea"
+              v-bind="schema.componentProps"
+          />
+        </VbenFormItem>
+      </VbenGridItem>
+      <VbenGridItem
+          v-if="innerProps?.schemas.length > 0 && innerProps.actions"
+          v-bind="innerProps.actionsProps"
+      >
+        <slot name="actions-prefix" v-bind="FormMethod || {}"></slot>
+        <slot name="actions" v-bind="FormMethod || {}">
+          <VbenButtonGroup
+          >
+            <VbenButton type="error" @click="formRef.restoreValidation">{{
+                innerProps.actionsProps.cancelText || '重置'
+              }}
+            </VbenButton>
+            <VbenButton
+                type="primary"
+                @click="innerProps.submitFunc(FormMethod)"
+            >{{ innerProps.actionsProps.submitText || '提交' }}
+            </VbenButton
             >
-              <VbenButton type="error" @click="formRef.restoreValidation">{{
-                  innerProps.actionsProps.cancelText || '重置'
-                }}
-              </VbenButton>
-              <VbenButton
-                  type="primary"
-                  @click="innerProps.submitFunc(FormMethod)"
-              >{{ innerProps.actionsProps.submitText || '提交' }}
-              </VbenButton
-              >
-            </VbenButtonGroup
-            >
-          </slot>
-          <slot name="actions-suffix" v-bind="FormMethod || {}"></slot>
-        </VbenGridItem>
-      </VbenGrid>
-    </Form>
-  </div>
+          </VbenButtonGroup
+          >
+        </slot>
+        <slot name="actions-suffix" v-bind="FormMethod || {}"></slot>
+      </VbenGridItem>
+    </VbenGrid>
+  </Form>
 </template>
 
 <style scoped></style>

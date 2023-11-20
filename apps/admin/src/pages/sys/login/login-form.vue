@@ -36,7 +36,6 @@ const handleCaptcha = () => {
   captcha.value = captchaUrl + `?t=${Date.now()}&reload=true`
 }
 const captcha_id = getCookie('captcha_id');
-console.log(captcha_id);
 isCaptcha.value = captcha_id != null
 const {validForm} = useFormValid(formRef);
 const show = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);

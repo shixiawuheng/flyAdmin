@@ -11,10 +11,10 @@ import {computed, PropType, ref, unref, useAttrs} from 'vue'
 import {isBoolean, isFunction} from '@vben/utils'
 import {VxeGridInstance} from 'vxe-table-demonic'
 import {ThemeEnum} from '@vben/constants'
-import {context} from '../../../bridge'
+import {useAppTheme} from '@vben/hooks'
 
-const {useAppStore} = context
-const appStore = useAppStore()
+const appStore = useAppTheme()
+console.log(appStore)
 import {useInterceptor} from './hooks'
 
 useInterceptor()
@@ -35,13 +35,7 @@ useInterceptor()
 )*/
 const attrs = useAttrs()
 const emit = defineEmits(['register'])
-const titleClass = computed(() => {
-  return {
-    backgroundColor:
-        appStore.getDarkMode === ThemeEnum.DARK ? '#262626' : '#FFF',
 
-  }
-})
 const props = defineProps({
   options: {
     type: Object as PropType<VbenTableProps>,
@@ -121,11 +115,10 @@ defineExpose({reload, Ref: xGrid})
 emit('register', {reload, setProps})
 </script>
 <template>
-  <div :style="titleClass" class="m-2 p-2">
+  <div class="m-2 p-2">
     <div v-if="title" class="flex m-2">
       <div class="ml-2 text-xl">{{ title }}</div>
     </div>
-
     <VxeGrid ref="xGrid" v-bind="getProps">
       <template v-for="item in Object.keys($slots)" :key="item" #[item]="data">
         <slot :name="item" v-bind="data || {}"></slot>

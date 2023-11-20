@@ -23,6 +23,7 @@ const [TableRegister] = useTable({
 const menuAddDrawRef = ref()
 
 function handleCreate() {
+  console.log(menuAddDrawRef.value)
   menuAddDrawRef.value.open()
 }
 
@@ -43,7 +44,6 @@ async function HandleCreateSuccess(order) {
 </script>
 <template>
   <VbenGrid :cols="12" :x-gap="8" :y-gap="12" style="padding: 20px">
-
     <!--    <VbenGridItem :span="12">-->
     <!--      <VbenCard :bordered="false" embedded>-->
     <!--        <VbenForm-->
@@ -83,6 +83,7 @@ async function HandleCreateSuccess(order) {
         <!--      </template>-->
       </VbenTable>
     </VbenGridItem>
+
   </VbenGrid>
   <MenuAddDraw ref="menuAddDrawRef" @success="HandleCreateSuccess"/>
 </template>

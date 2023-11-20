@@ -18,7 +18,7 @@ function open(prop) {
   const {title, data} = prop
   model.value = {
     type: undefined,
-    body: "aaa----1111",
+    body: "",
     ...data,
   }
   DrawerData.title = title || "创建订单"

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {reactive, ref, unref, computed} from 'vue';
 import {useI18n} from '@vben/locale';
-import {notice} from '@vben/vbencomponents'
+import {notice, useForm} from '@vben/vbencomponents'
 import {useUserStore} from '@/store/user';
 import {onKeyStroke} from '@vueuse/core';
 import {
@@ -13,29 +13,32 @@ import {
 import LoginFormTitle from './login-form-title.vue';
 import md5 from 'crypto-js/md5';
 
+const Store = JSON.parse(localStorage.getItem("login") || `{"rememberMe":false,"account":"","password":""}`)
 const formRef = ref(null);
 const loading = ref(false);
-const rememberMe = ref(false);
+const rememberMe = ref(Store.rememberMe);
 
 const {t} = useI18n();
 const userStore = useUserStore();
 const {setLoginState, getLoginState} = useLoginState();
 const {getFormRules} = useFormRules();
 const formData = reactive({
-  account: 'shixia',
-  password: '123456',
+  account: Store.account,
+  password: Store.password,
   captcha: "",
 });
 const isCaptcha = ref(false)
-const captchaUrl = "/basic-api/captcha"
+let captchaUrl = "/basic-api/captcha"
+if (import.meta.env.MODE != "development") {
+  captchaUrl = "/captcha"
+}
 const captcha = ref(captchaUrl)
 const handleCaptcha = () => {
   captcha.value = captchaUrl + `?t=${Date.now()}&reload=true`
 }
 const captcha_id = getCookie('captcha_id');
-console.log(captcha_id);
 isCaptcha.value = captcha_id != null
-const {validForm} = useFormValid(formRef);
+const [registerForm, {validForm}] = useFormValid();
 const show = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
 onKeyStroke('Enter', handleLogin);
 let login_time = 0;
@@ -56,9 +59,10 @@ async function handleLogin() {
   if (Date.now() - login_time < 100) return;
   login_time = Date.now();
   // 暂时不做校验
-  // debugger
+
   // const data = await validForm()
   // if (!data) return
+  // debugger
   try {
     loading.value = true;
     const userInfo = await userStore.login({
@@ -68,6 +72,12 @@ async function handleLogin() {
       mode: 'none' //不要默认的错误提示
     });
     if (userInfo) {
+      if (rememberMe.value) {
+        Store.password = formData.password;
+        Store.rememberMe = true;
+        Store.account = formData.account;
+        localStorage.setItem("login", JSON.stringify(Store))
+      }
       notice.success({
         content: t('sys.login.loginSuccessTitle'),
         meta: `${t('sys.login.loginSuccessDesc')}: ${userInfo.name == "新用户" ? '尊贵的起飞用户' : userInfo.name}`,
@@ -136,6 +146,7 @@ async function handleLogin() {
       ref="formRef"
       :model="formData"
       :rules="getFormRules"
+      @register="registerForm"
       @keypress.enter="handleLogin"
   >
     <vben-form-item :show-label="false" class="enter-x" inline>

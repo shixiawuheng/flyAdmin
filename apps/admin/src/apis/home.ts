@@ -1,14 +1,15 @@
-import { request } from '@vben/request'
+import {request} from '@vben/request'
 import {ErrorMessageMode} from "@vben/types";
 
 
-export interface device_online{
-    online:number,
-    max:number
+export interface device_online {
+    online: number,
+    max: number
 }
 
-export interface EntryData{
-    "device_online":device_online,
+export interface EntryData {
+    device_online: device_online,
+    order_wait: any[]
 }
 
 export function api_entry(
@@ -16,7 +17,7 @@ export function api_entry(
 ) {
     return request.get<EntryData>(
         {
-            url: '/entry',
+            url: '/home/entry',
         },
         {
             errorMessageMode: mode,

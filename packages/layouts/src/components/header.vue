@@ -5,19 +5,20 @@ import LayoutTabs from '../components/tabs/index.vue'
 import AppSearch from '../components/search/AppSearch.vue'
 import AppNotify from '../components/notify/index.vue'
 import AppFullScreen from '../components/FullScreen.vue'
-import { SettingButton } from '../components/setting'
+import {SettingButton} from '../components/setting'
 import UserDropdown from '../components/user-dropdown/index.vue'
-import { context } from '../../bridge'
-import { computed, unref } from 'vue'
-import { SettingButtonPositionEnum, NavBarModeEnum } from '@vben/constants'
-import { useAppTheme } from '@vben/hooks'
+import {context} from '../../bridge'
+import {computed, unref} from 'vue'
+import {SettingButtonPositionEnum, NavBarModeEnum} from '@vben/constants'
+import {useAppTheme} from '@vben/hooks'
+import {DarkModeToggle} from './setting'
 
-const { useAppConfig, useMenuSetting, useHeaderSetting, useRootSetting } =
-  context
+const {useAppConfig, useMenuSetting, useHeaderSetting, useRootSetting} =
+    context
 
-const { isTopMenu, isMix, menu } = useAppConfig()
+const {isTopMenu, isMix, menu} = useAppConfig()
 
-const { Logo, useMultipleTabSetting } = context
+const {Logo, useMultipleTabSetting} = context
 const {
   getShowFullScreen,
   getShowLocalePicker,
@@ -26,10 +27,10 @@ const {
   getShowNotice,
   getShowFullHeaderRef,
 } = useHeaderSetting()
-const { isDark } = useAppTheme()
-const { getSettingButtonPosition, getShowSettingButton } = useRootSetting()
-const { getMenuType, getMenuWidth, getShowHeaderTrigger } = useMenuSetting()
-const { getShowMultipleTab } = useMultipleTabSetting()
+const {isDark} = useAppTheme()
+const {getSettingButtonPosition, getShowSettingButton} = useRootSetting()
+const {getMenuType, getMenuWidth, getShowHeaderTrigger} = useMenuSetting()
+const {getShowMultipleTab} = useMultipleTabSetting()
 const getShowSetting = computed(() => {
   if (!unref(getShowSettingButton)) {
     return false
@@ -60,48 +61,49 @@ const logoWidth = computed(() => (unref(isTopMenu) ? 150 : getMenuWidth.value))
 <template>
   <VbenSpace vertical>
     <VbenSpace
-      v-if="getShowFullHeaderRef"
-      :class="['h-48px', 'shadow', { 'mb-8px': !getShowHeaderMultipleTab }]"
-      :style="{ '--un-shadow-color': 'var(--n-border-color)' }"
-      justify="space-between"
-      align="center"
+        v-if="getShowFullHeaderRef"
+        :class="['h-48px', 'shadow', { 'mb-8px': !getShowHeaderMultipleTab }]"
+        :style="{ '--un-shadow-color': 'var(--n-border-color)' }"
+        align="center"
+        justify="space-between"
     >
       <slot name="logo">
-        <VbenSpace align="center" class="items-center" :size="0">
+        <VbenSpace :size="0" align="center" class="items-center">
           <Logo
-            v-if="showHeaderLogo"
-            :style="{
+              v-if="showHeaderLogo"
+              :style="{
               width: logoWidth + 'px',
               maxWidth: logoWidth + 'px',
             }"
           />
-          <HeaderTrigger v-if="getShowHeaderTrigger" />
-          <slot name="breadcrumb" v-if="showHeaderBreadcrumb">
-            <LayoutBreadcrumb />
+          <HeaderTrigger v-if="getShowHeaderTrigger"/>
+          <slot v-if="showHeaderBreadcrumb" name="breadcrumb">
+            <LayoutBreadcrumb/>
           </slot>
         </VbenSpace>
       </slot>
-      <slot name="menu" v-if="!showHeaderBreadcrumb"></slot>
+      <slot v-if="!showHeaderBreadcrumb" name="menu"></slot>
       <div class="pl-8px pr-8px">
         <slot name="buttons">
-          <VbenSpace class="p-1" :size="16" align="center">
-            <AppSearch v-if="getShowSearch" />
-            <AppNotify :is-dark="isDark" v-if="getShowNotice" />
-            <AppFullScreen v-if="getShowFullScreen" />
+          <VbenSpace :size="16" align="center" class="p-1">
+            <AppSearch v-if="getShowSearch"/>
+            <AppNotify v-if="getShowNotice" :is-dark="isDark"/>
+            <AppFullScreen v-if="getShowFullScreen"/>
             <VbenLocalePicker
-              v-if="getShowLocalePicker"
-              :reload="true"
-              :showText="false"
+                v-if="getShowLocalePicker"
+                :reload="true"
+                :showText="false"
             />
-            <UserDropdown />
-            <SettingButton v-if="getShowSetting" />
+            <DarkModeToggle/>
+            <UserDropdown/>
+            <SettingButton v-if="getShowSetting"/>
           </VbenSpace>
         </slot>
       </div>
     </VbenSpace>
     <template v-if="getShowHeaderMultipleTab">
       <slot name="tabs">
-        <LayoutTabs />
+        <LayoutTabs/>
       </slot>
     </template>
   </VbenSpace>

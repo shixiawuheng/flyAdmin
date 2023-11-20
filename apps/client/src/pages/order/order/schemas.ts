@@ -45,6 +45,7 @@ export const baseColumns: VbenColumns = [
         title: '订单状态',
         align: 'center',
         width: '8%',
+        sortable: true,
         formatter: function ({cellValue}) {
             return status[cellValue]
         },
@@ -57,14 +58,14 @@ export const baseColumns: VbenColumns = [
         align: 'center',
     },
     {
-        field: 'createAt',
+        field: 'create_at',
         title: '创建时间',
         align: 'center',
         showOverflow: true,
         formatter: timeFormatter,
     },
     {
-        field: 'updateAt',
+        field: 'update_at',
         title: '更新时间',
         align: 'center',
         showOverflow: true,

@@ -1,6 +1,6 @@
 {
   "name": "@vben/directives",
-  "version": "3.0.0-beta.1",
+  "version": "1.0.1",
   "main": "index.ts",
   "module": "index.ts",
   "types": "index.d.js",
@@ -10,9 +10,12 @@
   "scripts": {
     "clean": "pnpm rimraf node_modules && pnpm rimraf dist && pnpm rimraf .turbo"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@vben/utils": "workspace:*",
-    "vue": "3.3.4"
+    "vue": "3.3.6"
   },
   "devDependencies": {
     "@vben/types": "workspace:*"

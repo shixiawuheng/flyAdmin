@@ -57,6 +57,7 @@ export default {
     feat: {
       ripple: 'Ripple',
       clickOutSide: 'ClickOutSide',
+      print: 'Print',
     },
     page: {
       page: 'Page',
@@ -69,6 +70,10 @@ export default {
       account: 'Account',
       accountCenter: 'Center',
       accountSetting: 'Setting',
+    },
+    transition: 'Transition',
+    steps: {
+      page: 'Intro page',
     },
   },
 }

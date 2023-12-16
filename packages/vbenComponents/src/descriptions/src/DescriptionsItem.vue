@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenDescItem">
-import { maps } from '#/index'
+<script lang="ts" setup >
+defineOptions({ name: 'VbenDescItem' })
+import { maps } from '../../index'
 const DescriptionsItem = maps.get('DescriptionsItem')
 </script>
 <template>

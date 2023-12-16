@@ -36,6 +36,22 @@ const feat: RouteRecordItem = {
         title: 'routes.demo.feat.print',
       },
     },
+    {
+      path: 'ellipsis',
+      name: 'Ellipsis',
+      component: () => import('@/pages/demo/feat/ellipsis.vue'),
+      meta: {
+        title: 'routes.demo.feat.ellipsis',
+      },
+    },
+    {
+      path: 'watermark',
+      name: 'Watermark',
+      component: () => import('@/pages/demo/feat/watermark.vue'),
+      meta: {
+        title: 'routes.demo.feat.watermark',
+      },
+    },
   ],
 }
 

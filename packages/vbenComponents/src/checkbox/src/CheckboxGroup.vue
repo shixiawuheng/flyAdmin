@@ -1,7 +1,8 @@
-<script lang="ts" setup name="VbenCheckboxGroup">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenCheckboxGroup' })
+import { maps } from '../../index'
 import Checkbox from './Checkbox.vue'
-import { fetchProps, fetch } from '#/fetch'
+import { fetchProps, fetch } from '../../fetch'
 import { computed, ref, useAttrs, watch, watchEffect } from 'vue'
 
 const CheckboxGroup = maps.get('CheckboxGroup')

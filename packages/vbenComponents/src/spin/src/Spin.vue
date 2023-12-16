@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenSpin">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenSpin' })
+import { maps } from '../../index'
 
 const Spin = maps.get('Spin')
 </script>

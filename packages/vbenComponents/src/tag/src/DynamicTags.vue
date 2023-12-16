@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenDynamicTags">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenDynamicTags' })
+import { maps } from '../../index'
 const DynamicTags = maps.get('DynamicTags')
 </script>
 <template>

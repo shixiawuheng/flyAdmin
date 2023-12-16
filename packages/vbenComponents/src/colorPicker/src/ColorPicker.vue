@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenColorPicker">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenColorPicker' })
+import { maps } from '../../index'
 const ColorPicker = maps.get('ColorPicker')
 </script>
 <template>

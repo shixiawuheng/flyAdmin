@@ -15,6 +15,7 @@ export default {
     card: '卡片',
     animate: '动画',
     form: '表单',
+    qrcode: '二维码组件',
     table: {
       table: '表格',
       basic: '基础表格',
@@ -59,6 +60,8 @@ export default {
       ripple: '水波纹',
       clickOutSide: 'ClickOutSide组件',
       print: '打印',
+      ellipsis: '文本省略',
+      watermark: '水印',
     },
     page: {
       page: '页面',

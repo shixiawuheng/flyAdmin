@@ -15,6 +15,7 @@ export default {
     card: 'Card',
     animate: 'Animate',
     form: 'Form',
+    qrcode: 'QR code',
     table: {
       table: 'table',
       basic: 'basic',
@@ -58,6 +59,8 @@ export default {
       ripple: 'Ripple',
       clickOutSide: 'ClickOutSide',
       print: 'Print',
+      ellipsis: 'EllipsisText',
+      watermark: 'Watermark',
     },
     page: {
       page: 'Page',

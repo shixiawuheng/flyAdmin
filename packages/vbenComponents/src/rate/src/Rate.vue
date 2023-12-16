@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenRate">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenRate' })
+import { maps } from '../../index'
 
 const Rate = maps.get('Rate')
 </script>

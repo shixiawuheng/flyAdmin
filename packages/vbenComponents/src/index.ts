@@ -2,7 +2,6 @@ import type { App, Component } from 'vue'
 const projectName = 'Vben3'
 export const components = {
   install: (app: App) => {
-    // const comp = import.meta.globEager('./**/*.vue')
     /* 上面写法vite官方已弃用，详情见 https://cn.vitejs.dev/guide/migration-from-v2.html#importmetaglob */
     const comp = import.meta.glob<any>('./**/*.vue', { eager: true })
     Object.keys(comp).forEach((k) => {
@@ -43,6 +42,21 @@ export function warn(message: string) {
 
 export function error(message: string) {
   throw new Error(`[${projectName} error]:${message}`)
+}
+
+//Dialog 相关
+let registerDialog = () => {}
+export let dialog
+export const setDialog = (func = () => {}) => {
+  registerDialog = func
+  console.log('useDialog已注册')
+}
+export const useDialog = () => {
+  dialog = registerDialog()
+  if (!dialog) {
+    console.log('注册失败')
+  }
+  return dialog
 }
 
 //Notification 相关

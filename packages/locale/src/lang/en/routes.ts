@@ -16,10 +16,18 @@ export default {
     animate: 'Animate',
     form: 'Form',
     qrcode: 'QR code',
+    countTo: 'Count To',
+    time: 'Relative Time"',
     table: {
       table: 'table',
       basic: 'basic',
       fixedColumn: 'fixedColumn',
+    },
+    scroll: {
+      scroll: 'Scroll',
+      basic: 'Basic',
+      action: 'Scroll Function',
+      virtual: 'Virtual Scroll',
     },
     modal: 'Modal',
     permission: {
@@ -61,6 +69,14 @@ export default {
       print: 'Print',
       ellipsis: 'EllipsisText',
       watermark: 'Watermark',
+      fullScreen: 'Full Screen',
+      copy: 'Clipboard',
+      ws: 'Websocket test',
+      msg: 'Message prompt',
+      requestDemo: 'Retry request demo',
+      sessionTimeout: 'Session Timeout',
+      icon: 'Icon',
+      contextMenu: 'Context Menu',
     },
     page: {
       page: 'Page',

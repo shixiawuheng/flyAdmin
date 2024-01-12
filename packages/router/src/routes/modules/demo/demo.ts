@@ -62,6 +62,40 @@ const dashboard: RouteRecordItem = {
         },
       ],
     },
+    {
+      path: 'scroll',
+      name: 'ScrollDemo',
+      redirect: '/demo/scroll/basic',
+      meta: {
+        title: 'routes.demo.scroll.scroll',
+      },
+      children: [
+        {
+          path: 'basic',
+          name: 'basicScrollDemo',
+          component: () => import('@/pages/demo/scroll/BasicScroll.vue'),
+          meta: {
+            title: 'routes.demo.scroll.basic',
+          },
+        },
+        {
+          path: 'action',
+          name: 'actionScrollDemo',
+          component: () => import('@/pages/demo/scroll/ActionScroll.vue'),
+          meta: {
+            title: 'routes.demo.scroll.action',
+          },
+        },
+        {
+          path: 'virtual',
+          name: 'virtualScrollDemo',
+          component: () => import('@/pages/demo/scroll/VirtualScroll.vue'),
+          meta: {
+            title: 'routes.demo.scroll.virtual',
+          },
+        },
+      ],
+    },
 
     {
       path: 'form',
@@ -125,6 +159,22 @@ const dashboard: RouteRecordItem = {
       component: () => import('@/pages/demo/QrCode.vue'),
       meta: {
         title: 'routes.demo.qrcode',
+      },
+    },
+    {
+      path: 'countTo',
+      name: 'CountTo',
+      component: () => import('@/pages/demo/CountTo.vue'),
+      meta: {
+        title: 'routes.demo.countTo',
+      },
+    },
+    {
+      path: 'time',
+      name: 'Time',
+      component: () => import('@/pages/demo/Time.vue'),
+      meta: {
+        title: 'routes.demo.time',
       },
     },
   ],

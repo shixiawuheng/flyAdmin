@@ -18,6 +18,7 @@ export default {
     qrcode: 'QR code',
     countTo: 'Count To',
     time: 'Relative Time"',
+    cropperImage: 'Cropper Image',
     table: {
       table: 'table',
       basic: 'basic',
@@ -77,6 +78,7 @@ export default {
       sessionTimeout: 'Session Timeout',
       icon: 'Icon',
       contextMenu: 'Context Menu',
+      download: 'Download',
     },
     page: {
       page: 'Page',
@@ -89,10 +91,14 @@ export default {
       account: 'Account',
       accountCenter: 'Center',
       accountSetting: 'Setting',
+      desc: 'Details',
+      descBasic: 'Basic Details',
+      descHigh: 'Advanced Details',
     },
     transition: 'Transition',
     steps: {
       page: 'Intro page',
     },
+    desc: 'Desc',
   },
 }

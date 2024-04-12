@@ -177,6 +177,22 @@ const dashboard: RouteRecordItem = {
         title: 'routes.demo.time',
       },
     },
+    {
+      path: 'cropper',
+      name: 'Cropper',
+      component: () => import('@/pages/demo/Cropper.vue'),
+      meta: {
+        title: 'routes.demo.cropperImage',
+      },
+    },
+    {
+      path: 'desc',
+      name: 'Desc',
+      component: () => import('@/pages/demo/Desc.vue'),
+      meta: {
+        title: 'routes.demo.desc',
+      },
+    },
   ],
 }
 

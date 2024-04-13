@@ -2,9 +2,9 @@
   "name": "vben-admin-monorepo",
   "version": "3.0.0-rc1",
   "private": true,
-  "homepage": "https://github.com/vbenjs/vue-vben-admin",
+  "homepage": "https://github.com/vbenjs/vben3",
   "bugs": {
-    "url": "https://github.com/vbenjs/vue-vben-admin/issues"
+    "url": "https://github.com/vbenjs/vben3/issues"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
     "lint:eslint": "eslint . --cache --max-warnings 0 --fix",
     "lint:prettier": "prettier --write  \"{packages,apps,configs,scripts}/**/*.{js,json,ts,tsx,css,less,scss,vue,html,md}\"",
     "lint:stylelint": "stylelint --fix ",
-    "reinstall": "pnpm turbo run clean && rimraf pnpm-lock.yaml && rimraf node_modules && npm run bootstrap",
+    "reinstall": "pnpm turbo run clean && rimraf pnpm-lock.yaml node_modules && pnpm run bootstrap",
     "stub": "pnpm --filter @config/** prepack",
     "test": "vitest",
     "turbo:build": "turbo run build --parallel",
@@ -44,21 +44,21 @@
     }
   },
   "devDependencies": {
-    "@changesets/cli": "^2.26.2",
+    "@changesets/cli": "^2.27.1",
     "@config/lint": "workspace:*",
     "@config/tsconfig": "workspace:*",
-    "@types/fs-extra": "^11.0.3",
-    "@types/node": "^20.8.8",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.11.17",
     "cross-env": "^7.0.3",
     "esno": "^0.17.0",
-    "fs-extra": "^11.1.1",
+    "fs-extra": "^11.2.0",
     "jsdom": "^22.1.0",
-    "pathe": "^1.1.1",
+    "pathe": "^1.1.2",
     "rimraf": "^5.0.5",
-    "rollup": "^4.1.4",
-    "ts-node": "^10.9.1",
-    "turbo": "^1.10.16",
-    "typescript": "^5.2.2",
+    "rollup": "^4.10.0",
+    "ts-node": "^10.9.2",
+    "turbo": "^1.12.3",
+    "typescript": "^5.3.3",
     "unbuild": "^2.0.0",
     "vitest": "^0.34.6"
   },

@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenLayoutContent">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenLayoutContent' })
+import { maps } from '../../index'
 
 const LayoutContent = maps.get('LayoutContent')
 </script>

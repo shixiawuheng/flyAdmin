@@ -7,7 +7,6 @@ import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform'
 
 import { VAxios } from './Axios'
 import { checkStatus } from './checkStatus'
-import { context } from '../bridge'
 import { useI18n } from '@vben/locale'
 import {
   isString,
@@ -72,6 +71,13 @@ const transform: AxiosTransform = {
 
     // @ts-ignore
     context.msgFunction.error(message)
+
+    switch (code) {
+      case ResultEnum.TIMEOUT:
+        context.unauthorizedFunction?.(message)
+        break
+    }
+
     throw new Error(message)
     // 在此处根据自己项目的实际情况对不同的code执行不同的操作
     // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
@@ -105,7 +111,7 @@ const transform: AxiosTransform = {
   // 请求之前处理config
   beforeRequestHook: (config, options) => {
     const { apiUrl, joinParamsToUrl, formatDate, joinTime = true } = options
-
+    const { baseURL } = config
     if (apiUrl) {
       const _apuUrl = isString(apiUrl)
         ? apiUrl
@@ -234,7 +240,7 @@ export const createAxios = (opt?: Partial<CreateAxiosOptions>) => {
         authenticationScheme: '',
         timeout: 10 * 1000,
         // 基础接口地址
-        // baseURL: globSetting.apiUrl,
+        // baseURL: '',
 
         headers: { 'Content-Type': ContentTypeEnum.JSON },
         // 如果是form-data格式
@@ -254,7 +260,7 @@ export const createAxios = (opt?: Partial<CreateAxiosOptions>) => {
           // 消息提示类型
           errorMessageMode: 'message',
           // 接口地址
-          apiUrl: () => context.apiUrl,
+          apiUrl: '',
           //  是否加入时间戳
           joinTime: true,
           // 忽略重复请求
@@ -268,7 +274,51 @@ export const createAxios = (opt?: Partial<CreateAxiosOptions>) => {
   )
 }
 
-export const request = createAxios()
+export let request = createAxios()
+
+export function initRequest(
+  opt: Partial<CreateAxiosOptions>,
+  ctx: Partial<ContextOptions>,
+) {
+  request = createAxios(opt)
+  context = { ...context, ...ctx }
+}
+import type { ErrorMessageMode } from '@vben/types'
+
+export interface ContextOptions {
+  errorFunction: AnyFunction<any>
+  msgFunction: AnyFunction<any>
+  errorModalFunction: AnyFunction<any>
+  noticeFunction: AnyFunction<any>
+  modalFunction: AnyFunction<any>
+  getTokenFunction: () => unknown
+  unauthorizedFunction: (msg?: string) => void
+  timeoutFunction: () => void
+  handleErrorFunction: (message?: string, mode?: ErrorMessageMode) => void
+  apiUrl?: string
+}
+
+export let context: ContextOptions = {
+  getTokenFunction: () => undefined,
+  unauthorizedFunction: () => {},
+  errorFunction: () => {},
+  msgFunction: () => {},
+  noticeFunction: () => {},
+  modalFunction: () => {},
+  errorModalFunction: () => {},
+  handleErrorFunction: () => {},
+  timeoutFunction: () => {},
+  apiUrl: '',
+}
+export const setMsg = (func: AnyFunction<any>) => {
+  context.msgFunction = func
+}
+export const setNotice = (func: AnyFunction<any>) => {
+  context.noticeFunction = func
+}
+export const setDialog = (func: AnyFunction<any>) => {
+  context.modalFunction = func
+}
 
 // other api url
 // export const otherHttp = createAxios({

@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenDivider">
-import { maps } from '#/index'
+<script lang="ts" setup >
+defineOptions({ name: 'VbenDivider' })
+import { maps } from '../../index'
 const Divider = maps.get('Divider')
 </script>
 <template>

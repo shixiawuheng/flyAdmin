@@ -10,11 +10,10 @@ import {
   TabTbrConfigOptions,
   TransitionConfigOptions,
 } from '@vben/types'
-import { _assign } from '@vben/utils'
+import { _assign, deepMerge } from '@vben/utils'
 import {
   CacheTypeEnum,
   ContentLayoutEnum,
-  HEADER_PRESET_BG_COLOR_LIST,
   MenuModeEnum,
   MixSidebarTriggerEnum,
   NavBarModeEnum,
@@ -22,12 +21,11 @@ import {
   RouterTransitionEnum,
   SessionTimeoutProcessingEnum,
   SettingButtonPositionEnum,
-  SIDE_BAR_BG_COLOR_LIST,
   ThemeEnum,
   TriggerEnum,
 } from '@vben/constants'
 
-const defaultOptions: DefineAppConfigOptions = {
+let defaultOptions: DefineAppConfigOptions = {
   theme: ThemeEnum.LIGHT, //TODO remove
   navBarMode: NavBarModeEnum.SIDEBAR,
   themeColor: '', //TODO remove
@@ -51,7 +49,6 @@ const defaultOptions: DefineAppConfigOptions = {
     theme: ThemeEnum.LIGHT,
     show: true,
     visible: true,
-    bgColor: SIDE_BAR_BG_COLOR_LIST[0],
     fixed: false,
     width: 210,
     mixSidebarWidth: 80,
@@ -76,7 +73,6 @@ const defaultOptions: DefineAppConfigOptions = {
     theme: ThemeEnum.DARK,
     show: true,
     visible: true,
-    bgColor: HEADER_PRESET_BG_COLOR_LIST[0],
     fixed: false,
     height: 48,
     showDoc: true,
@@ -122,7 +118,7 @@ const defaultOptions: DefineAppConfigOptions = {
 
 // Must be called before the first use of useAppConfig
 export const initAppConfigStore = (options: DefineAppConfigOptions) => {
-  Object.assign(defaultOptions, options)
+  defaultOptions = deepMerge(defaultOptions, options)
   useAppConfig()
 }
 

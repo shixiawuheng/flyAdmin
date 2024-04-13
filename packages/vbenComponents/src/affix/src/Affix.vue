@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenAffix">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenAffix' })
+import { maps } from '../../index'
 
 const Affix = maps.get('Affix')
 </script>

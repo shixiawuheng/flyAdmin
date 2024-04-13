@@ -57,7 +57,8 @@ export async function createViteConfig(
       }),
     },
     server: {
-      https: VITE_USE_HTTPS,
+      hmr: true,
+      // https:  VITE_USE_HTTPS ,
       port: 3000,
       host: true,
       proxy: !VITE_USE_HTTPS ? resolveProxy(VITE_PROXY) : undefined,

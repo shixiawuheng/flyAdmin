@@ -46,6 +46,8 @@ export interface GlobConfig {
   apiUrl: string
   // Project abbreviation
   shortName: string
+  //Backend url
+  baseUrl: string
 }
 
 export interface GlobEnvConfig {
@@ -55,6 +57,8 @@ export interface GlobEnvConfig {
   VITE_GLOB_API_URL: string
   // Project abbreviation
   VITE_GLOB_APP_SHORT_NAME: string
+  //Backend url
+  VITE_GLOB_BASE_URL: string
 }
 
 export interface DefineAppConfigOptions {
@@ -110,7 +114,6 @@ export interface SidebarConfigOptions {
   show: boolean
   visible: boolean
   fixed: boolean
-  bgColor: string
   collapsed: boolean
   width: number
   trigger: TriggerEnum
@@ -148,7 +151,6 @@ export interface HeaderConfigOptions {
   theme: ThemeEnum
   show: boolean
   visible: boolean
-  bgColor: string
   fixed: boolean
   showFullScreen: boolean
   showDoc: boolean

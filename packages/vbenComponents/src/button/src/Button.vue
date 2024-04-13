@@ -1,6 +1,7 @@
-<script lang="ts" setup name="VbenButton">
-import { maps } from '#/index'
+<script lang="ts" setup>
+import { maps } from '../../index'
 import { ref } from 'vue'
+defineOptions({ name: 'VbenButton' })
 const Button = maps.get('Button')
 const Ref = ref(null)
 defineExpose({ Ref })

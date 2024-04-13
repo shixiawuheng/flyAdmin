@@ -26,7 +26,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '20.x'
           cache: 'pnpm'
 
       # 安装依赖项
@@ -41,6 +41,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: 114.115.157.254
+          port: 21
           username: vben
           password: ${{ secrets.ftp_password }}
           local-dir: ./apps/admin/dist/

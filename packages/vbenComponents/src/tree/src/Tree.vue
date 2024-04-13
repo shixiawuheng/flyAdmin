@@ -1,6 +1,7 @@
-<script lang="ts" setup name="VbenTree">
-import { maps } from '#/index'
-import { fetchProps, fetch } from '#/fetch'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenTree' })
+import { maps } from '../../index'
+import { fetchProps, fetch } from '../../fetch'
 import { computed, h, ref, watch, watchEffect } from 'vue'
 import { NodeButtonGroup } from '../index'
 const Tree = maps.get('Tree')

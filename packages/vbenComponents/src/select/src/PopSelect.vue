@@ -1,6 +1,7 @@
-<script lang="ts" setup name="VbenPopSelect">
-import { maps } from '#/index'
-import { fetchProps, fetch } from '#/fetch'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenPopSelect' })
+import { maps } from '../../index'
+import { fetchProps, fetch } from '../../fetch'
 import { watch, ref, watchEffect } from 'vue'
 import { omit } from '@vben/utils'
 const PopSelect = maps.get('PopSelect')

@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenEmpty">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenEmpty' })
+import { maps } from '../../index'
 const Empty = maps.get('Empty')
 </script>
 <template>

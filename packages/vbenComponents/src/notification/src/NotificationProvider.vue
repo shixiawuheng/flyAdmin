@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenNotificationProvider">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenNotificationProvider' })
+import { maps } from '../../index'
 const NotificationProvider = maps.get('NotificationProvider')
 </script>
 <template>

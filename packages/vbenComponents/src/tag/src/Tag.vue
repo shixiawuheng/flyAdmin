@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenTag">
-import { maps } from '#/index'
+<script lang="ts" setup >
+defineOptions({ name: 'VbenTag' })
+import { maps } from '../../index'
 const Tag = maps.get('Tag')
 </script>
 <template>

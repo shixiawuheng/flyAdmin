@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenInputGroup">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenInputGroup' })
+import { maps } from '../../index'
 const InputGroup = maps.get('InputGroup')
 </script>
 <template>

@@ -56,6 +56,7 @@ function open(prop) {
             return res
         }
     };`,
+    ...JSON.parse(localStorage.getItem("order_types_from_value") || "{}"),
     ...data,
   }
   model.value.level = model.value.level.toString()
@@ -64,6 +65,7 @@ function open(prop) {
 }
 
 function close() {
+  localStorage.setItem("order_types_from_value", JSON.stringify(model.value))
   return (menuDrawerFlag.value = false)
 }
 
@@ -72,7 +74,7 @@ defineExpose({
   open,
   close,
 })
-const model = ref<order_type>({level: 1, money: 0, name: "", note: "", script: ""})
+const model = ref<order_type>({notify: "", web_uri: "", level: 1, money: 0, name: "", note: "", script: ""})
 
 const loading = ref(true)
 
@@ -89,6 +91,7 @@ function ScriptCheck(script: string): Promise<string> {
           bare_returns: true,
         }
       })
+      if (!output.code) throw new Error("脚本返回值为空")
       const Func = new Function(output.code)()
       if (typeof Func != "function") throw new Error("脚本返回值有误不是函数! " + typeof Func)
       resolve(output.code)

@@ -98,3 +98,12 @@ export function api_list(
         },
     )
 }
+
+export function api_getBody(order_id: string, mode: ErrorMessageMode = 'modal') {
+    return request.get({
+        url: "/order/getBody?id=" + order_id,
+    }, {
+        errorMessageMode: mode,
+        joinTime: false
+    })
+}

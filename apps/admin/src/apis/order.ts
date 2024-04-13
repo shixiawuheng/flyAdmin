@@ -7,6 +7,8 @@ export interface order_type {
     money: number,
     level: number | string,
     name: string,
+    notify: string
+    web_uri: string
     script: string
 }
 

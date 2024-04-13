@@ -3,6 +3,7 @@ import {ref} from 'vue'
 import {api_list, order} from '@/apis/order'
 import {baseColumns, status} from './schemas'
 import MenuAddDraw from './model/menuAddDraw.vue'
+import Body from './model/body.vue'
 import {msg, useTable} from "@vben/vbencomponents";
 
 const tableRef = ref()
@@ -21,6 +22,7 @@ const [TableRegister] = useTable({
   scrollY: {enabled: true, gt: 50}
 })
 const menuAddDrawRef = ref()
+const BodyRef = ref()
 
 function handleCreate() {
   console.log(menuAddDrawRef.value)
@@ -28,11 +30,11 @@ function handleCreate() {
 }
 
 function handleShowBody(row: order) {
-  if (row.status != 3) {
-    msg.warning(`当前状态[${status[row.status]}]不允许查看内容`)
-    return
-  }
-  console.log()
+  // if (row.status != 3) {
+  //   msg.warning(`当前状态[${status[row.status]}]不允许查看内容`)
+  //   return
+  // }
+  BodyRef.value.open(row.id)
 }
 
 async function HandleCreateSuccess(order) {
@@ -86,4 +88,5 @@ async function HandleCreateSuccess(order) {
 
   </VbenGrid>
   <MenuAddDraw ref="menuAddDrawRef" @success="HandleCreateSuccess"/>
+  <Body ref="BodyRef"/>
 </template>

@@ -21,6 +21,7 @@ export const baseColumns: VbenColumns = [
         field: 'name',
         title: '名称',
         align: 'center',
+        showOverflow: true,
     },
     {
         field: 'level',
@@ -45,9 +46,22 @@ export const baseColumns: VbenColumns = [
         showOverflow: true,
     },
     {
+        field: 'notify',
+        title: '通知接口',
+        align: 'center',
+        showOverflow: true,
+    },
+    {
+        field: 'web_uri',
+        title: '外链',
+        align: 'center',
+        showOverflow: true,
+    },
+    {
         field: 'note',
         title: '备注',
         align: 'center',
+        showOverflow: true,
     },
     {
         field: 'action',

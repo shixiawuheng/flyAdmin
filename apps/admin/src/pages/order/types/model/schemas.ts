@@ -71,6 +71,36 @@ export const menuAddSchema: VbenFormSchema[] = [
         },
     },
     {
+        field: 'notify',
+        label: '订单通知接口',
+        component: 'Input',
+        required: false,
+        gridItemProps: {
+            span: 24,
+        },
+        // labelProps: {
+        //     labelPlacement: 'left',
+        // },
+        componentProps: {
+            placeholder: '请输入',
+        },
+    },
+    {
+        field: 'web_uri',
+        label: '外链',
+        component: 'Input',
+        required: false,
+        gridItemProps: {
+            span: 24,
+        },
+        // labelProps: {
+        //     labelPlacement: 'left',
+        // },
+        componentProps: {
+            placeholder: '请输入',
+        },
+    },
+    {
         field: 'note',
         label: '备注',
         component: 'InputTextArea',

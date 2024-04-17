@@ -4,6 +4,11 @@ export default {
         order: '订单管理',
         types: "类型管理",
     },
+    sys: {
+        index: '系统管理',
+        user: '用户管理',
+        key: '充值卡管理',
+    },
     basic: {
         login: '登录',
         lock: '锁屏',

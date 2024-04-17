@@ -4,7 +4,7 @@
       <div class="flex justify-evenly gap-x-3">
         <div class="bg-white w-1/3 h-40 rounded-3xl p-2 grid grid-cols-12 grid-rows-6 shadow-xl shadow-light-600">
           <p class="col-start-1 col-span-3 row-start-2 row-span-2 text-lg text-gray-400 m-auto">
-            活跃设备
+            今日订单完成
           </p>
           <div class="col-start-2 col-span-1 row-start-4 row-span-2 flex items-center justify-center">
             <CountTo

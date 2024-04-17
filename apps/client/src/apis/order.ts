@@ -10,8 +10,29 @@ export interface order_type {
     script: string
 }
 
+export enum order_status {
+    OrderPending = 1, // 待激活订单
+    OrderWait,        // 待执行订单
+    OrderRunning,     // 执行中订单
+    OrderOk,          // 订单完成
+    OrderError,       // 订单异常
+    OrderExpire,      // 订单过期
+}
+
+// export interface order {
+//     id: number,
+//     note: string,
+//     money: number,
+//     level: number | string,
+//     name: string,
+//     script: string,
+//     create_at: number,
+//     update_at: number,
+// }
+
 export interface order {
     id: number,
+    uid: number,
     order: string,
     type: number,
     status: number,
@@ -70,13 +91,30 @@ export function api_create(
     body: string,
     mode: ErrorMessageMode = 'modal',
 ) {
-    return request.post<null>(
+    return request.post<order>(
         {
             url: '/order/create?type=' + type,
             data: body,
             headers: {
                 ['Content-Type']: "text/plain"
-            }
+            },
+            timeout: 1000000,
+        },
+        {
+            errorMessageMode: mode,
+        },
+    )
+}
+
+export function api_make(
+    data,
+    mode: ErrorMessageMode = 'modal',
+) {
+    return request.post<string[]>(
+        {
+            url: '/order/make',
+            data,
+            timeout: 1000000,
         },
         {
             errorMessageMode: mode,

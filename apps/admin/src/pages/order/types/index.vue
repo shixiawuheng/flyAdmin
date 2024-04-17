@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ref, unref} from 'vue'
-import {api_types, api_addType, api_editType} from '@/apis/order'
+import {api_types, api_addType, api_editType, order_type} from '@/apis/order'
 import {baseColumns} from './schemas'
 
 import MenuAddDraw from './model/menuAddDraw.vue'
@@ -11,12 +11,12 @@ const reload = () => {
     loading.value = true
     api_types().then(res => {
       data.value = res
-      resolve()
+      resolve(void 0)
     }).catch(reject).finally(() => loading.value = false)
   })
 }
 reload()
-const data = ref([])
+const data = ref<order_type[]>([])
 const Height = window.innerHeight - 165
 const menuAddDrawRef = ref()
 

@@ -62,3 +62,9 @@ export function api_newpwd(data: NewPwdParams, mode: ErrorMessageMode = 'modal')
         data
     }, {errorMessageMode: mode,})
 }
+
+export function api_info(mode: ErrorMessageMode = 'modal') {
+    return request.get<UserInfo>({
+        url: '/home/info',
+    }, {errorMessageMode: mode,})
+}

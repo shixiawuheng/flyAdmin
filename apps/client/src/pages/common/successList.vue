@@ -1,5 +1,10 @@
 <template>
   <div style="height: 100%">
+    <vben-alert :type="($attrs.data?.length || 0) * ($attrs.price || 0)< ($attrs.money || 0) ? 'success': 'warning'">
+      <span>成功数量：{{ ($attrs.data?.length || 0) }} ==> 当前余额:{{ $attrs.money }} ==> 预计起飞币:{{
+          ($attrs.data?.length || 0) * ($attrs.price || 0)
+        }}</span>
+    </vben-alert>
     <vxe-list
         :auto-resize="true"
         :scroll-y="{enabled: true, gt: 60, sItem: '.my-tr'}"
@@ -64,6 +69,7 @@ function Copy(text) {
 .my-table-list {
   border: 1px solid #e8eaec;
   height: 92%;
+  margin-top: 1%;
   margin-bottom: 3%;
 }
 

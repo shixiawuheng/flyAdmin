@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref, defineExpose, nextTick} from 'vue'
+import {ref, defineExpose} from 'vue'
 import {api_getBody} from "@/apis/order";
 import {msg, notice} from '@vben/vbencomponents'
 import {writeTextToClipboard} from "@vben/hooks";
@@ -7,7 +7,7 @@ import {writeTextToClipboard} from "@vben/hooks";
 
 const menuDrawerFlag = ref(false)
 
-const Body = ref([])
+const Body = ref<string[]>([])
 
 function open(order_id: string) {
   api_getBody(order_id).then((res: string) => {

@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
-import {api_list, order} from '@/apis/order'
+import {api_list, order, order_status} from '@/apis/order'
 import {baseColumns, status} from './schemas'
 import MenuAddDraw from './model/menuAddDraw.vue'
 import Body from './model/body.vue'
 import {msg, useTable} from "@vben/vbencomponents";
+import MenuMakeDraw from "./model/menuMakeDraw.vue";
 
 const tableRef = ref()
-const data = ref([])
+const data = ref<order[]>([])
 const loading = ref(false)
 
 const [TableRegister] = useTable({
@@ -22,18 +23,18 @@ const [TableRegister] = useTable({
   scrollY: {enabled: true, gt: 50}
 })
 const menuAddDrawRef = ref()
+const menuMakeDrawRef = ref()
 const BodyRef = ref()
 
 function handleCreate() {
-  console.log(menuAddDrawRef.value)
   menuAddDrawRef.value.open()
 }
 
 function handleShowBody(row: order) {
-  // if (row.status != 3) {
-  //   msg.warning(`当前状态[${status[row.status]}]不允许查看内容`)
-  //   return
-  // }
+  if (!(row.status == order_status.OrderError || row.status == order_status.OrderOk)) {
+    msg.warning(`当前状态[${status[row.status]}]不允许查看内容`)
+    return
+  }
   BodyRef.value.open(row.id)
 }
 
@@ -43,50 +44,68 @@ async function HandleCreateSuccess(order) {
   msg.success("创建订单成功")
 }
 
+async function HandleMakeSuccess(arr) {
+  arr.forEach(item => {
+    data.value.push(item)
+  })
+  menuMakeDrawRef.value.close()
+}
+
+function handleMake() {
+  menuMakeDrawRef.value.open()
+}
+
 </script>
 <template>
-  <VbenGrid :cols="12" :x-gap="8" :y-gap="12" style="padding: 20px">
-    <!--    <VbenGridItem :span="12">-->
-    <!--      <VbenCard :bordered="false" embedded>-->
-    <!--        <VbenForm-->
-    <!--            ref="formRef"-->
-    <!--            v-model:model="formModel"-->
-    <!--            class="w-full"-->
-    <!--            @register="formReg"-->
-    <!--        />-->
-    <!--      </VbenCard>-->
-    <!--    </VbenGridItem>-->
-    <VbenGridItem :span="12">
-      <VbenTable
-          ref="tableRef"
-          :loading="loading"
-          @register="TableRegister"
-      >
-        <template #toolbar>
-          <div class="pb-2">
-            <VbenButton class="ml-2" type="primary" @click="handleCreate">
-              创建订单
+  <div style="height: 100%">
+    <VbenGrid :cols="12" :x-gap="8" :y-gap="12" style="padding: 20px">
+      <!--    <VbenGridItem :span="12">-->
+      <!--      <VbenCard :bordered="false" embedded>-->
+      <!--        <VbenForm-->
+      <!--            ref="formRef"-->
+      <!--            v-model:model="formModel"-->
+      <!--            class="w-full"-->
+      <!--            @register="formReg"-->
+      <!--        />-->
+      <!--      </VbenCard>-->
+      <!--    </VbenGridItem>-->
+      <VbenGridItem :span="12">
+        <VbenTable
+            ref="tableRef"
+            :loading="loading"
+            height="1000px"
+            @register="TableRegister"
+        >
+          <template #toolbar>
+            <div class="pb-2">
+              <VbenButton class="ml-2" type="primary" @click="handleCreate">
+                创建订单
+              </VbenButton>
+              <VbenButton class="ml-2" type="primary" @click="handleMake">
+                生成外部订单
+              </VbenButton>
+            </div>
+          </template>
+          <template #action="{row}">
+            <VbenButton secondary size="tiny" strong type="primary" @click="handleShowBody(row)">
+              查看结果
             </VbenButton>
-          </div>
-        </template>
-        <template #action="{row}">
-          <VbenButton secondary size="tiny" strong type="primary" @click="handleShowBody(row)">
-            查看结果
-          </VbenButton>
-        </template>
-        <template #empty>
+          </template>
+          <template #empty>
         <span style="color: red;">
           <img src="https://n.sinaimg.cn/sinacn17/w120h120/20180314/89fc-fyscsmv5911424.gif"/>
           <p>  暂无数据！</p>
         </span>
-        </template>
-        <!--      <template v-for="item in Object.keys($slots)" :key="item" #[item]="data">-->
-        <!--        <slot :name="item" v-bind="data || {}"></slot>-->
-        <!--      </template>-->
-      </VbenTable>
-    </VbenGridItem>
+          </template>
+          <!--      <template v-for="item in Object.keys($slots)" :key="item" #[item]="data">-->
+          <!--        <slot :name="item" v-bind="data || {}"></slot>-->
+          <!--      </template>-->
+        </VbenTable>
+      </VbenGridItem>
 
-  </VbenGrid>
-  <MenuAddDraw ref="menuAddDrawRef" @success="HandleCreateSuccess"/>
-  <Body ref="BodyRef"/>
+    </VbenGrid>
+    <MenuAddDraw ref="menuAddDrawRef" @success="HandleCreateSuccess"/>
+    <MenuMakeDraw ref="menuMakeDrawRef" @success="HandleMakeSuccess"/>
+    <Body ref="BodyRef"/>
+  </div>
 </template>

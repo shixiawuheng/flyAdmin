@@ -1,5 +1,5 @@
 import {VbenColumns} from '@vben/vbenComponents/src/table'
-import {api_base} from "@/apis/order";
+import {api_base, order_type, order_status} from "@/apis/order";
 import dayjs from "dayjs";
 
 function timeFormatter({cellValue}) {
@@ -92,7 +92,7 @@ export const baseColumns: VbenColumns = [
 // });
 export let status = {}
 
-export let types = []
+export let types: order_type[] = []
 
 export async function Base() {
     const base = await api_base()

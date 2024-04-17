@@ -1,20 +1,33 @@
-import {VbenFormSchema} from '@vben/vbencomponents/src/form'
-import {levels} from '../schemas'
+import {VbenFormSchema} from "@vben/vbencomponents/src/form";
+import {levels} from "@/pages/order/types/schemas";
 
-export const menuAddSchema: VbenFormSchema[] = [
+export const AddSchemas: VbenFormSchema[] = [
     {
         field: 'name',
-        label: '名称',
+        label: '昵称',
         component: 'Input',
-        required: true,
-        gridItemProps: {
-            span: 24,
+        rule: {
+            required: false,
         },
+        gridItemProps: {span: 24},
         // labelProps: {
         //     labelPlacement: 'left',
         // },
         componentProps: {
-            placeholder: '请输入',
+            placeholder: '请输入昵称',
+        },
+    },
+    {
+        field: 'account',
+        label: '账号',
+        component: 'Input',
+        required: true,
+        gridItemProps: {span: 24},
+        // labelProps: {
+        //     labelPlacement: 'left',
+        // },
+        componentProps: {
+            placeholder: '请输入账号',
         },
     },
     {
@@ -48,36 +61,9 @@ export const menuAddSchema: VbenFormSchema[] = [
     },
     {
         field: 'money',
-        label: '单价',
+        label: '初始起飞币',
         component: 'InputNumber',
-        gridItemProps: {span: 24},
-        // labelProps: {
-        //     labelPlacement: 'left',
-        // },
-        componentProps: {
-            placeholder: '请输入',
-        },
-    },
-    {
-        field: 'script',
-        label: '脚本',
-        component: 'InputTextArea',
-        gridItemProps: {span: 24},
-        // labelProps: {
-        //     labelPlacement: 'left',
-        // },
-        componentProps: {
-            placeholder: '请输入',
-        },
-    },
-    {
-        field: 'notify',
-        label: '订单通知接口',
-        component: 'Input',
-        required: false,
-        rule: {
-            required: false,
-        },
+        required: true,
         gridItemProps: {
             span: 24,
         },
@@ -85,23 +71,19 @@ export const menuAddSchema: VbenFormSchema[] = [
         //     labelPlacement: 'left',
         // },
         componentProps: {
-            placeholder: '请输入',
+            placeholder: '请输入起飞币数量',
+            min: 1,
         },
     },
     {
-        field: 'web_uri',
-        label: '外链',
+        field: 'notice',
+        label: '通知接口',
         component: 'Input',
-        required: false,
+        gridItemProps: {span: 24},
         rule: {
             required: false,
         },
-        gridItemProps: {
-            span: 24,
-        },
-        // labelProps: {
-        //     labelPlacement: 'left',
-        // },
+        required: false,
         componentProps: {
             placeholder: '请输入',
         },
@@ -115,9 +97,6 @@ export const menuAddSchema: VbenFormSchema[] = [
             required: false,
         },
         required: false,
-        // labelProps: {
-        //     labelPlacement: 'left',
-        // },
         componentProps: {
             placeholder: '请输入',
         },

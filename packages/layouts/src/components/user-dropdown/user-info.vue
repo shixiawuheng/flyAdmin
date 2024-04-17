@@ -6,10 +6,9 @@ const {useUserStore, useAppInject} = context
 
 const userStore = useUserStore()
 const {getIsMobile} = useAppInject()
-
 const getUserInfo = computed(() => {
   const {name = '尊贵的起飞用户', avatar, desc} = userStore.getUserInfo || {}
-  return {name: name == '新用户' ? '尊贵的起飞用户' : name, avatar: avatar || '/logo.svg', desc: desc || '无'}
+  return {name: name == '新用户' ? '尊贵的起飞用户' : name, avatar: avatar || '/event/logo.svg', desc: desc || '无'}
 })
 </script>
 <template>

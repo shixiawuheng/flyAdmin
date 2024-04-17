@@ -1,5 +1,9 @@
 <template>
   <div style="height: 100%">
+    <vben-alert type="info">
+      <span>错误数量：{{ $attrs.data.length }}</span>
+    </vben-alert>
+
     <vxe-list
         :auto-resize="true"
         :scroll-y="{enabled: true, gt: 60, sItem: '.my-tr'}"

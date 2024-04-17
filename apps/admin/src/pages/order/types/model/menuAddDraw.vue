@@ -16,9 +16,10 @@ function open(prop) {
   prop = prop || {}
   const {title, data, api} = prop
   submitApi = api
+
   model.value = {
     money: 1,
-    level: '1',
+    level: 1,
     name: 'x',
     note: 'x',
     script: ` return function(body){
@@ -59,7 +60,7 @@ function open(prop) {
     ...JSON.parse(localStorage.getItem("order_types_from_value") || "{}"),
     ...data,
   }
-  model.value.level = model.value.level.toString()
+  // model.value.level = model.value.level
   DrawerData.title = title || "未知"
   return (menuDrawerFlag.value = true)
 }

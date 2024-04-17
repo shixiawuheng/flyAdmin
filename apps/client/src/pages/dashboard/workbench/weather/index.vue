@@ -26,11 +26,11 @@
             <div class="font-bold flex">
               <iframe
                   v-if="IsWeather"
+                  :src="VITE_WEATHER_URL"
                   allowtransparency="true"
                   frameborder="0"
                   height="20"
                   scrolling="no"
-                  src="https://tianqiapi.com/api.php?style=tx&skin=pitaya"
                   style="min-width: 350px;margin-top: 8px"
                   width="100%"
               ></iframe>
@@ -75,6 +75,7 @@ const BaseData = ref({
   month: new Date().toLocaleString('en', {month: 'short'}),
   day: new Date().getDate(),
 })
+const VITE_WEATHER_URL = import.meta.env.VITE_WEATHER_URL || "https://widget.tianqiapi.com/?style=tx&skin=pitaya"
 </script>
 
 <style scoped>

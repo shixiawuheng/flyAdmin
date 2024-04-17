@@ -22,15 +22,12 @@ const userStore = useUserStore();
 const {setLoginState, getLoginState} = useLoginState();
 const {getFormRules} = useFormRules();
 const formData = reactive({
-  account: 'shixia',
-  password: '123456',
+  account: '',
+  password: '',
   captcha: "",
 });
 const isCaptcha = ref(false)
-let captchaUrl = "/basic-api/captcha"
-if (import.meta.env.MODE != "development") {
-  captchaUrl = "/captcha"
-}
+const captchaUrl = import.meta.env.VITE_GLOB_API_URL + "/captcha"
 const captcha = ref(captchaUrl)
 const handleCaptcha = () => {
   captcha.value = captchaUrl + `?t=${Date.now()}&reload=true`

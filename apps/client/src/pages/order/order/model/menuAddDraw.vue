@@ -5,7 +5,11 @@ import {msg, notice} from '@vben/vbencomponents'
 import {types} from '../schemas'
 import successList from '@/pages/common/successList.vue'
 import errorList from '@/pages/common/errorList.vue'
+import {useUserStore} from "@/store/user";
 
+const UserStore = useUserStore()
+const Info = UserStore.getUserInfo
+const WorkerJs = import.meta.env.VITE_PUBLIC_PATH + "/worker.js"
 const menuDrawerFlag = ref(false)
 const DrawerData = reactive({
   title: '新增类型',
@@ -43,8 +47,8 @@ const model = ref({
 })
 const DropLoading = ref(false)
 const loading = ref(false)
-const success = ref([])
-const error = ref([])
+const success = ref<string[]>([])
+const error = ref<string[]>([])
 watch(() => step.value, (value => {
   switch (value) {
     case "load":
@@ -61,7 +65,7 @@ watch(() => step.value, (value => {
 function ScriptCheck(Script: string, Body: string): Promise<ScriptResult> {
   return new Promise((resolve, reject) => {
     try {
-      const worker = new Worker("/worker.js");
+      const worker = new Worker(WorkerJs);
       worker.postMessage({Script, Body})
       worker.onmessage = (result) => {
         if (result.data) {
@@ -94,7 +98,7 @@ watch(() => model.value.type, (value) => {
   const obj = types.find((item) => {
     return item.id == value
   })
-  model.value.note = obj.note
+  model.value.note = obj?.note || ""
   IndexType = obj
 })
 
@@ -120,6 +124,9 @@ function handlePost() {
   }
   loading.value = true
   api_create(type, body).then((order) => {
+    if (!(Info && IndexType)) return;
+    Info.money -= order.count * IndexType?.money
+    UserStore.setUserInfo(Info)
     emit("success", order)
   }).finally(() => loading.value = false)
 }
@@ -160,7 +167,8 @@ function handleDrop(e) {
   const reader = new FileReader();
   DropLoading.value = true
   reader.onload = function (e) {
-    model.value.body = e.target.result as string
+    // if (!e.target) return
+    model.value.body = e.target?.result as string
     DropLoading.value = false
   };
   nextTick(() => reader.readAsText(files[0]))
@@ -213,7 +221,13 @@ function handleDropEnter(e) {
           </vben-button>
         </vben-form-item>
       </vben-form>
-      <successList v-if="step==='success'" :data="success" :loading="loading" @success="handlePost"/>
+      <successList
+          v-if="step==='success'"
+          :data="success"
+          :loading="loading"
+          :money="Info?.money"
+          :price="IndexType?.money"
+          @success="handlePost"/>
       <errorList v-if="step==='error'" :data="error" :loading="loading" @success="ShowSuccess"/>
     </VbenDrawerContent>
   </VbenDrawer>

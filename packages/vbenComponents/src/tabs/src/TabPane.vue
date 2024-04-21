@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenTabPane">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenTabPane' })
+import { maps } from '../../index'
 const TabPane = maps.get('TabPane')
 </script>
 <template>

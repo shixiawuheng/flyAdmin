@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenDrawer">
-import { maps } from '#/index'
+<script lang="ts" setup >
+defineOptions({ name: 'VbenDrawer' })
+import { maps } from '../../index'
 const Drawer = maps.get('Drawer')
 </script>
 <template>

@@ -69,17 +69,13 @@ export const useUserStore = defineStore('app-user-store', {
     ): Promise<UserInfo | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params
-        const userInfo = await doLoginApi(loginParams, mode)
+        const { accessToken } = await doLoginApi(loginParams, mode)
         // save token
-        this.setAccessToken(userInfo.account)
+        this.setAccessToken(accessToken)
         if (!this.getAccessToken) {
           return null
         }
-        this.setUserInfo(userInfo)
-        if (goHome) {
-          await router.replace(BASIC_HOME_PATH)
-        }
-        return userInfo
+        return this.afterLoginAction(goHome)
       } catch (error) {
         return Promise.reject(error)
       }

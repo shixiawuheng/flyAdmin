@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenH5">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenH5' })
+import { maps } from '../../index'
 const H5 = maps.get('H5')
 </script>
 <template>

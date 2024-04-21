@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenAvatar">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenAvatar' })
+import { maps } from '../../index'
 
 const Avatar = maps.get('Avatar')
 </script>

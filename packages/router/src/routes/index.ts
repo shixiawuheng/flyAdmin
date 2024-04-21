@@ -15,10 +15,19 @@ export * from './basic'
 const routeModules = []
 export const layoutRoutes = [...routeModules]
 
+export function getTemplateRoutes(demo: boolean = true): RouteRecordRaw[] {
+  return layoutRoutes.filter((v) => {
+    if (demo) {
+      return true
+    }
+    return !v.path.includes('demo')
+  })
+}
+
 export const BasicRoutes = [
-    LOGIN_ROUTE,
-    LOCK_SCREEN_ROUTE,
-    ROOT_ROUTE,
-    REDIRECT_ROUTE,
-    PAGE_NOT_FOUND_ROUTE,
+  LOGIN_ROUTE,
+  LOCK_SCREEN_ROUTE,
+  ROOT_ROUTE,
+  REDIRECT_ROUTE,
+  PAGE_NOT_FOUND_ROUTE,
 ]

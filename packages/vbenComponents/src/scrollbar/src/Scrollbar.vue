@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenScrollbar">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenScrollbar' })
+import { maps } from '../../index'
 
 const Scrollbar = maps.get('Scrollbar')
 </script>

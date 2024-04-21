@@ -1,5 +1,6 @@
-<script lang="ts" setup name="VbenRadioButton">
-import { maps } from '#/index'
+<script lang="ts" setup>
+defineOptions({ name: 'VbenRadioButton' })
+import { maps } from '../../index'
 const RadioButton = maps.get('RadioButton')
 </script>
 <template>

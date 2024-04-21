@@ -97,8 +97,8 @@ function handleSubmit() {
     MakeData.value = res.join("\n")
     step.value = "success"
     if (Info) {
-      Info.money -= BeMoney.value
-      UserStore.setUserInfo(Info)
+      // Info.money -= BeMoney.value
+      // UserStore.setUserInfo(Info)
     }
   }).finally(() => loading.value = false)
 }

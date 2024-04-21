@@ -24,6 +24,8 @@ function Copy() {
   writeTextToClipboard(Data.join("\r\n")).then(() => {
     msg.success("复制成功")
     close()
+  }).catch(e => {
+    msg.info("复制不一定成功!请确认后关闭窗口!")
   })
 }
 

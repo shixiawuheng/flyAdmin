@@ -6,6 +6,7 @@ import MenuAddDraw from './model/menuAddDraw.vue'
 import Body from './model/body.vue'
 import {msg, useTable} from "@vben/vbencomponents";
 import MenuMakeDraw from "./model/menuMakeDraw.vue";
+import {writeTextToClipboard} from '@vben/hooks/src/web/useCopyToClipboard'
 
 const tableRef = ref()
 const data = ref<order[]>([])
@@ -55,6 +56,10 @@ function handleMake() {
   menuMakeDrawRef.value.open()
 }
 
+function handleCopy(row) {
+  writeTextToClipboard(row.id)
+  msg.success("复制成功")
+}
 </script>
 <template>
   <div style="height: 100%">
@@ -87,6 +92,9 @@ function handleMake() {
             </div>
           </template>
           <template #action="{row}">
+            <VbenButton secondary size="tiny" strong type="primary" @click="handleCopy(row)">
+              复制链接
+            </VbenButton>
             <VbenButton secondary size="tiny" strong type="primary" @click="handleShowBody(row)">
               查看结果
             </VbenButton>

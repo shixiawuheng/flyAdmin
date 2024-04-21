@@ -14,7 +14,6 @@ import {ThemeEnum} from '@vben/constants'
 import {useAppTheme} from '@vben/hooks'
 
 const appStore = useAppTheme()
-console.log(appStore)
 import {useInterceptor} from './hooks'
 
 useInterceptor()

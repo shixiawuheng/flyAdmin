@@ -125,8 +125,8 @@ function handlePost() {
   loading.value = true
   api_create(type, body).then((order) => {
     if (!(Info && IndexType)) return;
-    Info.money -= order.count * IndexType?.money
-    UserStore.setUserInfo(Info)
+    // Info.money -= order.count * IndexType?.money
+    // UserStore.setUserInfo(Info)
     emit("success", order)
   }).finally(() => loading.value = false)
 }

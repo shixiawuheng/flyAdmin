@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref, defineExpose, reactive, watch, nextTick} from 'vue'
+import {ref, defineExpose, reactive, watch, nextTick, computed} from 'vue'
 import {order_type, ScriptResult, api_create} from "@/apis/order";
 import {msg, notice} from '@vben/vbencomponents'
 import {types} from '../schemas'
@@ -178,6 +178,11 @@ function handleDropEnter(e) {
   e.stopPropagation();
   e.preventDefault();
 }
+
+const GetPrice = computed(() => {
+  return Math.ceil((IndexType?.money || 0) * (Info?.rebate || 0))
+})
+
 </script>
 <template>
   <VbenDrawer
@@ -226,7 +231,7 @@ function handleDropEnter(e) {
           :data="success"
           :loading="loading"
           :money="Info?.money"
-          :price="IndexType?.money"
+          :price="GetPrice"
           @success="handlePost"/>
       <errorList v-if="step==='error'" :data="error" :loading="loading" @success="ShowSuccess"/>
     </VbenDrawerContent>

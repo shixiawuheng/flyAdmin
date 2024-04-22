@@ -17,6 +17,7 @@ export interface UserInfo {
     account: string
     name: string
     money: number
+    rebate: number
     desc?: string
     homePath?: string
 }
@@ -25,6 +26,7 @@ export interface UserState {
     userInfo: Nullable<UserInfo>
     accessToken?: string
     roles: RoleInfo[]
+    levels: Object
     sessionTimeout?: boolean
     lastUpdateTime: number
 }

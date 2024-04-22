@@ -120,8 +120,9 @@ export class VAxios {
         conf.requestOptions = opt
 
         conf = this.supportFormData(conf)
-
+        if (!conf.url.startsWith("/")) conf.url = "/" + conf.url
         return new Promise((resolve, reject) => {
+            // console.log(conf)
             this.axiosInstance
                 .request<any, AxiosResponse<RequestResult>>(conf)
                 .then((res: AxiosResponse<RequestResult>) => {

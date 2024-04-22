@@ -1,6 +1,7 @@
 import type {ErrorMessageMode} from '@vben/types'
 import {request} from '@vben/request'
 import {UserInfo} from "@vben/types";
+import {order_type} from "@/apis/order.js";
 
 export interface RoleInfo {
     name: string
@@ -53,4 +54,17 @@ export function getPermCode() {
 
 export function doLogoutApi() {
     return request.get({url: '/logout'})
+}
+
+export async function api_levels(
+    mode: ErrorMessageMode = 'modal',
+) {
+    return request.get<order_type[]>(
+        {
+            url: '/levels',
+        },
+        {
+            errorMessageMode: mode,
+        },
+    )
 }

@@ -60,6 +60,7 @@ function handleCopy(row) {
   writeTextToClipboard(row.id)
   msg.success("复制成功")
 }
+
 </script>
 <template>
   <div style="height: 100%">

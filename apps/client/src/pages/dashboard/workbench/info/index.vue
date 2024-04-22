@@ -5,30 +5,26 @@
       <span class="ml-4 text-lg text-gray-500 font-semibold cursor-default">个人信息</span>
     </div>
     <div class="h-9/10 m-3 overflow-auto">
-      <vben-descriptions :column="1" label-placement="left" size="large">
-        <vben-descriptions-item label="昵称">
+      <VbenDesc :column="1" label-placement="left" size="large">
+        <VbenDescItem label="昵称">
           {{ info?.name || '尊贵的起飞用户' }}
-        </vben-descriptions-item>
-        <vben-descriptions-item label="用户名">
+        </VbenDescItem>
+        <VbenDescItem label="用户名">
           {{ info?.account || '未知' }}
-        </vben-descriptions-item>
-        <vben-descriptions-item label="密码">
+        </VbenDescItem>
+        <VbenDescItem label="密码">
           <div>
             ******
           </div>
-        </vben-descriptions-item>
-        <vben-descriptions-item label="起飞币">
+        </VbenDescItem>
+        <VbenDescItem label="起飞币">
           <CountTo
               :duration="1000"
               :endVal="info?.money || 0"
               :startVal="0"/>
 
-        </vben-descriptions-item>
-
-        <!--          <vben-descriptions-item label="夜宵">-->
-        <!--            苹果-->
-        <!--          </vben-descriptions-item>-->
-      </vben-descriptions>
+        </VbenDescItem>
+      </VbenDesc>
       <vben-divider style="margin-top: 10px;margin-bottom: 10px"/>
       <vben-button
           block

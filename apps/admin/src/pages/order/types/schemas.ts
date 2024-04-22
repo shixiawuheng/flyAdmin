@@ -1,6 +1,9 @@
 import {VbenColumns} from '@vben/vbenComponents/src/table'
-import {api_levels} from '@/apis/order'
+import {useUserStore} from "@/store/user";
+// import {levels} from '@/apis/auth'
+//
 
+export const levels = useUserStore().getLevels
 
 export interface Data {
     table: {
@@ -71,10 +74,6 @@ export const baseColumns: VbenColumns = [
     }
 ]
 
-export let levels = {};
-(async function () {
-    levels = await api_levels()
-})()
 
 
 

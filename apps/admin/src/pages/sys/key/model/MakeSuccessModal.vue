@@ -40,6 +40,12 @@ function Save() {
   close()
 }
 
+const check = ref(false)
+
+function Check() {
+
+}
+
 defineExpose({
   open,
   close
@@ -54,10 +60,13 @@ defineExpose({
       :title="Title"
       preset="dialog"
   >
-    <div class="action">{{ Body }}</div>
+    <div v-if="!check" class="action">{{ Body }}</div>
+    <vben-input v-if="check" :value="Data.join('\\r\\n')" type="textarea"/>
     <template #action>
       <div class="action">
         <vben-button type="primary" @click="Copy">复 制 到 剪 贴 板</vben-button>
+        <div style="margin: 0 60px"></div>
+        <vben-button type="primary" @click="check=true">查 看</vben-button>
         <div style="margin: 0 60px"></div>
         <vben-button type="primary" @click="Save">保 存 到 文 件</vben-button>
       </div>

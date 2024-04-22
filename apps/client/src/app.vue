@@ -1,26 +1,26 @@
 <script lang="ts" setup>
-import { useLocale } from '@vben/locale'
-import { useAppTheme, useWebTitle } from '@vben/hooks'
+import {useLocale} from '@vben/locale'
+import {useAppTheme, useWebTitle} from '@vben/hooks'
 
-import { REDIRECT_NAME } from '@vben/constants'
-import { getGlobalConfig, computedAsync } from '@vben/utils'
+import {REDIRECT_NAME} from '@vben/constants'
+import {getGlobalConfig, computedAsync} from '@vben/utils'
 import AppProvider from '@/layout/components/app/AppProvider'
-import { dateEnUS, dateZhCN, enUS, zhCN, darkTheme } from 'naive-ui'
-import { unref, watch, computed } from 'vue'
+import {dateEnUS, dateZhCN, enUS, zhCN, darkTheme} from 'naive-ui'
+import {unref, watch, computed} from 'vue'
 // Support Multi-language
-const { getLocale } = useLocale()
+const {getLocale} = useLocale()
 // Listening to page changes and dynamically changing site titles
-const { title } = getGlobalConfig(import.meta.env)
+const {title} = getGlobalConfig(import.meta.env)
 useWebTitle(title, (route) => route.name !== REDIRECT_NAME)
-const { isDark, themeColors } = useAppTheme()
+const {isDark, themeColors} = useAppTheme()
 
 //监听是否暗黑模式
 watch(
-  () => unref(isDark),
-  (v) => {
-    document.getElementsByTagName('html')[0].className = v ? 'dark' : ''
-  },
-  { immediate: true },
+    () => unref(isDark),
+    (v) => {
+      document.getElementsByTagName('html')[0].className = v ? 'dark' : ''
+    },
+    {immediate: true},
 )
 
 // Dynamic switch component library language
@@ -71,17 +71,19 @@ const themeOverrides = computed(() => {
 
 <template>
   <VbenConfig
-    :locale="locale"
-    :date-locale="dateLocale"
-    :theme="theme"
-    v-bind="themeOverrides"
+      :date-locale="dateLocale"
+      :locale="locale"
+      :theme="theme"
+      v-bind="themeOverrides"
   >
     <VbenNotificationProvider>
-      <VbenMessageProvider>
-        <AppProvider>
-          <router-view />
-        </AppProvider>
-      </VbenMessageProvider>
+      <VbenDialogProvider>
+        <VbenMessageProvider>
+          <AppProvider>
+            <router-view/>
+          </AppProvider>
+        </VbenMessageProvider>
+      </VbenDialogProvider>
     </VbenNotificationProvider>
   </VbenConfig>
 </template>

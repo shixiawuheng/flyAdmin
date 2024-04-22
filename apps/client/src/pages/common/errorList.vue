@@ -52,7 +52,8 @@ function Copy(text) {
 
 .my-table-list {
   border: 1px solid #e8eaec;
-  height: 92%;
+  height: 90%;
+  margin-top: 1%;
   margin-bottom: 3%;
 }
 

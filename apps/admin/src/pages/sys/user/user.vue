@@ -3,7 +3,9 @@ import {ref} from "vue";
 import CreateDraw from "./model/CreateDraw.vue";
 import CreateSuccessModal from "./model/CreateSuccessModal.vue";
 import {UserColumns} from "./schemas";
+import {api_list} from "@/apis/user"
 import {useTable} from "@vben/vbencomponents";
+
 
 const Height = window.innerHeight - 165
 const CreateRef = ref()
@@ -11,27 +13,46 @@ const CreateSuccessRef = ref()
 const [registerTable, {reload}] = useTable({
       columnConfig: {resizable: false},
       columns: UserColumns,
+      title: "用户管理",
+      api: api_list,
+      stripe: true,
+      border: true,
+      pagination: {
+        loading: false,
+        size: 'small',
+        background: true,
+        pageSize: 50,
+        pageSizes: [50, 100, 200, 500, 1000],
+      },
+
     },
 )
+const handleEdit = (row) => {
+  console.log(row)
+}
 
 function CreateSuccess(user) {
   CreateRef.value.close()
   CreateSuccessRef.value?.open(user)
+  reload()
 }
 
-function F5() {
-
-}
 </script>
 <template>
-  <div>
+  <div style="margin: 20px">
     <vben-table
         @register="registerTable"
     >
       <template #toolbar>
         <div class="pb-2">
-          <vben-button class="action" @click="F5"/>
+          <vben-button class="action" style="top:2.5px" @click="reload">
+            <VbenIconify
+                hoverPointer
+                icon="ic:baseline-sync"
+            />
+          </vben-button>
           <vben-button class="action" type="primary" @click="CreateRef?.open">添加用户</vben-button>
+          <!--          <vben-button class="action" type="primary" @click="CreateRef?.open">添加用户</vben-button>-->
         </div>
       </template>
       <template #action="{row}">
@@ -57,7 +78,7 @@ function F5() {
 
 <style scoped>
 .action {
-  display: flex;
+  display: inline-block;
   margin-right: 10px;
 }
 </style>

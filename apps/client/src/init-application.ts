@@ -1,38 +1,41 @@
-import { initRequest } from '@vben/request'
-import { useUserStoreWithout, useUserStore } from '@/store/user'
-import { useI18n, useLocale } from '@vben/locale'
-import { getGlobalConfig } from '@vben/utils'
-import { projectSetting } from './setting'
-import { initComp } from '@vben/vbencomponents'
-import { initLayout } from '@vben/layouts'
-import { localeList } from '@vben/locale/src/config'
+import {initRequest} from '@vben/request'
+import {useUserStoreWithout, useUserStore} from '@/store/user'
+import {useI18n, useLocale} from '@vben/locale'
+import {getGlobalConfig} from '@vben/utils'
+import {projectSetting} from './setting'
+import {initComp} from '@vben/vbencomponents'
+import {initLayout} from '@vben/layouts'
+import {localeList} from '@vben/locale/src/config'
 import {
-  useAppInject,
-  useHeaderSetting,
-  useMenuSetting,
-  useMultipleTabSetting,
-  useRootSetting,
-  useTabs,
-  useTransitionSetting,
-  useDesign,
-  useAppConfig,
-  usePromise,
-  initAppConfig,
+    useAppInject,
+    useHeaderSetting,
+    useMenuSetting,
+    useMultipleTabSetting,
+    useRootSetting,
+    useTabs,
+    useTransitionSetting,
+    useDesign,
+    useAppConfig,
+    usePromise,
+    initAppConfig,
 } from '@vben/hooks'
 import {
-  getAllParentPath,
-  getChildrenMenus,
-  getCurrentParentPath,
-  getMenus,
-  getShallowMenus,
-  listenerRouteChange,
+    getAllParentPath,
+    getChildrenMenus,
+    getCurrentParentPath,
+    getMenus,
+    getShallowMenus,
+    listenerRouteChange,
 } from '@vben/router'
-import { useAppStore } from '@/store/modules/app'
+import {useAppStore} from '@/store/modules/app'
 import Logo from '@/layout/components/logo.vue'
 
-import { useLockStore } from '@/store/lock'
-import { useLockScreen } from '@/hooks/web/useLockScreen'
-import { siteSetting } from '@/config'
+import {useLockStore} from '@/store/lock'
+import {useLockScreen} from '@/hooks/web/useLockScreen'
+import {siteSetting} from '@/config'
+import {context} from '@vben/request/src'
+import {SessionTimeoutProcessingEnum} from '@vben/constants'
+import {useAppConfig as appConfigStore} from '@vben/stores'
 
 // To decouple the modules below `packages/*`, they no longer depend on each other
 // If the modules are heavily dependent on each other, you need to provide a decoupling method, and the caller will pass the parameters
@@ -42,81 +45,98 @@ import { siteSetting } from '@/config'
 // 如果模块相互依赖严重，则需要对外提供解耦方式，由调用方去进行参数传递
 // 各个模块需要提供 `bridge` 文件作为解耦方式
 async function initPackages() {
-  const _initRequest = async () => {
-    const { apiUrl } = getGlobalConfig(import.meta.env)
-    const { t } = useI18n()
-    initRequest({
-      apiUrl,
-      getTokenFunction: () => {
-        const userStore = useUserStoreWithout()
-        return userStore.getAccessToken
-      },
-      errorFunction: null,
-      noticeFunction: null,
-      errorModalFunction: null,
-      timeoutFunction: () => {
-        const userStore = useUserStoreWithout()
-        userStore.setAccessToken(undefined)
-        userStore.logout(true)
-      },
-      unauthorizedFunction: (msg?: string) => {
-        const userStore = useUserStoreWithout()
-        userStore.setAccessToken(undefined)
-        userStore.logout(true)
-        return msg || t('sys.api.errMsg401')
-      },
-      handleErrorFunction: (msg, mode) => {
-        if (mode === 'modal') {
-          Modal.error({ title: t('sys.api.errorTip'), content: msg })
-        } else if (mode === 'message') {
-          message.error(msg)
-        }
-      },
-    })
-  }
+    const _initRequest = async () => {
+        const {apiUrl} = getGlobalConfig(import.meta.env)
+        const {t} = useI18n()
 
-  const _initComp = async () => {
-    initComp({
-      useLocale,
-      localeList,
-      useAppStore,
-    })
-  }
-  const _initLayout = async () => {
-    initLayout({
-      useAppConfig,
-      useRootSetting,
-      getMenus,
-      getCurrentParentPath,
-      getShallowMenus,
-      getChildrenMenus,
-      getAllParentPath,
-      useHeaderSetting,
-      useDesign,
-      useAppInject,
-      useTabs,
-      usePromise,
-      listenerRouteChange,
-      useUserStore,
-      useAppStore,
-      Logo,
-      useMenuSetting,
-      useMultipleTabSetting,
-      useTransitionSetting,
-      useLockStore,
-      useLockScreen,
-      siteSetting,
-    })
-  }
+        initRequest(
+            {
+                requestOptions: {
+                    apiUrl,
+                    // errorMessageMode: 'modal',
+                },
+            },
+            {
+                getTokenFunction: () => {
+                    const userStore = useUserStoreWithout()
+                    return userStore.getAccessToken
+                },
+                errorFunction: undefined,
+                noticeFunction: undefined,
+                errorModalFunction: undefined,
+                timeoutFunction: () => {
+                    const userStore = useUserStoreWithout()
+                    userStore.setAccessToken(undefined)
+                    userStore.logout(true)
+                },
+                unauthorizedFunction: (msg?: string) => {
+                    const userStore = useUserStoreWithout()
+                    const useAppConfigStore = appConfigStore()
+                    const stp = useAppConfigStore.sessionTimeoutProcessing
+                    userStore.setAccessToken(undefined)
+                    if (stp === SessionTimeoutProcessingEnum.PAGE_COVERAGE) {
+                        userStore.setSessionTimeout(true)
+                    } else {
+                        userStore.logout(true)
+                    }
+                    return msg || t('sys.api.errMsg401')
+                },
+                handleErrorFunction: (msg, mode) => {
+                    if (mode === 'modal') {
+                        context.modalFunction.error({
+                            title: t('sys.api.errorTip'),
+                            content: msg,
+                        })
+                    } else if (mode === 'message') {
+                        context.msgFunction.error(msg)
+                    }
+                },
+            },
+        )
+    }
 
-  await Promise.all([_initRequest(), _initComp(), _initLayout()])
+    const _initComp = async () => {
+        initComp({
+            useLocale,
+            localeList,
+            useAppStore,
+        })
+    }
+    const _initLayout = async () => {
+        initLayout({
+            useAppConfig,
+            useRootSetting,
+            getMenus,
+            getCurrentParentPath,
+            getShallowMenus,
+            getChildrenMenus,
+            getAllParentPath,
+            useHeaderSetting,
+            useDesign,
+            useAppInject,
+            useTabs,
+            usePromise,
+            listenerRouteChange,
+            useUserStore,
+            useAppStore,
+            Logo,
+            useMenuSetting,
+            useMultipleTabSetting,
+            useTransitionSetting,
+            useLockStore,
+            useLockScreen,
+            siteSetting,
+        })
+    }
+
+    await Promise.all([_initRequest(), _initComp(), _initLayout()])
 }
 
 export async function initApplication() {
-  // ! Need to pay attention to the timing of execution
-  // ! 需要注意调用时机
-  await initPackages()
+    // ! Need to pay attention to the timing of execution
+    // ! 需要注意调用时机
+    await initPackages()
 
-  // Initial project configuration
-  initAppConfig(projectSetting)
+    // Initial project configuration
+    initAppConfig(projectSetting)
 }

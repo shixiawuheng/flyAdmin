@@ -26,18 +26,6 @@ export function api_types(
     )
 }
 
-export async function api_levels(
-    mode: ErrorMessageMode = 'modal',
-) {
-    return request.get<order_type[]>(
-        {
-            url: '/order/levels',
-        },
-        {
-            errorMessageMode: mode,
-        },
-    )
-}
 
 export async function api_addType(
     params: order_type,

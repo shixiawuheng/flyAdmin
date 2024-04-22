@@ -9,7 +9,6 @@
         :auto-resize="true"
         :scroll-y="{enabled: true, gt: 60, sItem: '.my-tr'}"
         class="my-table-list"
-        height="100%"
         v-bind="$attrs">
       <template #default="{ items }">
         <div
@@ -68,7 +67,7 @@ function Copy(text) {
 
 .my-table-list {
   border: 1px solid #e8eaec;
-  height: 92%;
+  height: 90%;
   margin-top: 1%;
   margin-bottom: 3%;
 }

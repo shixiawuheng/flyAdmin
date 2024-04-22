@@ -35,3 +35,20 @@ export function api_create(
             errorMessageMode: mode,
         })
 }
+
+export function api_list(data) {
+    return request.post<UserData[]>(
+        {
+            url: '/user/list',
+            data,
+        },
+    )
+}
+
+export function api_status() {
+    return request.get<any>(
+        {
+            url: '/user/status',
+        }
+    )
+}

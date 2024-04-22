@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref, defineExpose, reactive, watch} from 'vue'
+import {ref, defineExpose, reactive, watch, computed} from 'vue'
 import {order_type, api_make} from "@/apis/order";
 import {notice} from '@vben/vbencomponents'
 import {types} from '../schemas'
@@ -59,6 +59,9 @@ function handleTypeOptions() {
   })
 }
 
+const GetPrice = computed(() => {
+  return Math.ceil((IndexType?.money || 0) * (Info?.rebate || 0))
+})
 const BeMoney = ref(0)
 const BeType = ref<"success" | "warning">("success")
 watch(() => model.value.type, (value) => {
@@ -72,7 +75,7 @@ watch(() => model.value.type, (value) => {
 watch(() => model.value.count, (value) => {
   if (value == void 0) return
   if (IndexType) {
-    BeMoney.value = IndexType.money * value
+    BeMoney.value = GetPrice.value * value
     if (BeMoney.value > (Info?.money || 0)) {
       BeType.value = "warning"
     } else {
@@ -119,7 +122,7 @@ function handleSubmit() {
         </vben-form-item>
         <vben-form-item v-show="model.type" :show-label="false" class="enter-x" inline>
           <vben-alert type="warning">
-            <pre style="margin-top: -2px;margin-bottom: 0">单价: {{ IndexType?.money }} ==> {{ model.note }}</pre>
+            <pre style="margin-top: -2px;margin-bottom: 0">单价: {{ GetPrice }} ==> {{ model.note }}</pre>
           </vben-alert>
         </vben-form-item>
         <vben-form-item

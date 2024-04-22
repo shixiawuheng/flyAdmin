@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import {ref} from "vue";
-import {writeTextToClipboard} from '@vben/hooks/src/web/useCopyToClipboard'
+import {ref, watch} from "vue";
 import {msg} from '@vben/vbencomponents'
 
 const Title = ref("创建成功")
@@ -18,6 +17,7 @@ function close() {
 }
 
 
+const emit = defineEmits(['close'])
 defineExpose({
   open,
   close
@@ -31,7 +31,6 @@ defineExpose({
       preset="dialog"
   >
     <div class="action">{{ Body }}</div>
-
   </vben-modal>
 </template>
 

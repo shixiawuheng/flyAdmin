@@ -1,83 +1,10 @@
-<template>
-  <div class="bg-light-400 p-5 mx-2 flex justify-between gap-x-2">
-    <div class=" flex flex-col gap-y-5">
-      <div class="flex justify-evenly gap-x-3">
-        <div class="bg-white w-1/3 h-40 rounded-3xl p-2 grid grid-cols-12 grid-rows-6 shadow-xl shadow-light-600">
-          <p class="col-start-1 col-span-3 row-start-2 row-span-2 text-lg text-gray-400 m-auto">
-            今日订单完成
-          </p>
-          <div class="col-start-2 col-span-1 row-start-4 row-span-2 flex items-center justify-center">
-            <CountTo
-                :duration="1000"
-                :endVal="200"
-                :startVal="100"
-                class="text-3xl"
-                color="#595959"
-            />
-          </div>
-          <div class="col-start-4 col-span-10 row-start-1 row-span-6">
-            <v-chart ref="lineChart" :option="e1_option" autoresize/>
-          </div>
-        </div>
-        <div class="bg-white w-1/3 h-40 rounded-3xl grid grid-cols-12 grid-rows-6 shadow-xl shadow-light-600">
-          <p class="col-start-1 col-span-6 row-start-2 row-span-2 text-lg text-gray-400 m-auto">
-            活跃设备
-          </p>
-          <div class="col-start-2 col-span-4 row-start-4 row-span-2 flex items-center justify-center">
-            <CountTo
-                :duration="300"
-                :endVal="DeviceOnline.online"
-                :startVal="0"
-                class="text-3xl"
-                color="#595959"
-            />
-          </div>
-          <div class="col-start-6 col-span-7 row-start-1 row-span-6">
-            <v-chart ref="DeviceRef" :option="Device_chart" autoresize/>
-          </div>
-        </div>
-        <div class="bg-white w-1/3 h-40 rounded-3xl grid grid-cols-12 grid-rows-6 shadow-xl shadow-light-600">
-          <p class="col-start-1 col-span-5 row-start-2 row-span-2 text-lg text-gray-400 m-auto">
-            收入来源
-          </p>
-          <div
-              class="col-start-2 col-span-3 row-start-4 row-span-2 flex items-center justify-center"
-          ></div>
-          <div class="col-start-1 col-span-12 row-start-1 row-span-6">
-            <v-chart ref="pieChart" :option="e3_option" autoresize/>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="bg-white p-5 w-full h-96 rounded-3xl grid grid-cols-12 grid-rows-6 shadow-xl shadow-light-600">
-          <div class="col-start-1 col-span-12 row-start-1 row-span-6">
-            <v-chart ref="lineCharts2" :option="Order_chart" autoresize/>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--    <div class="flex flex-col items-center gap-y-5 w-1/4">-->
-    <!--      <div class="bg-white w-11/12 h-1/2 p-5 rounded-lg grid grid-cols-12 grid-rows-12 shadow-xl shadow-light-600">-->
-    <!--        <div class="col-start-1 col-span-12 row-start-1 row-span-12">-->
-    <!--          <v-chart ref="barChart" :option="e5_option" autoresize />-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--      <div-->
-    <!--        class="bg-white w-11/12 h-1/2 rounded-lg grid grid-cols-12 grid-rows-12 shadow-xl shadow-light-600"-->
-    <!--      >-->
-    <!--        <div class="col-start-1 col-span-12 row-start-1 row-span-12">-->
-    <!--          <v-chart ref="calendarChart" :option="e6_option" autoresize />-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-  </div>
-</template>
-
 <script lang="ts" setup>
-import {ref, onMounted, onBeforeUnmount} from 'vue'
+import {ref, onMounted, onUnmounted, unref} from 'vue'
+import {api_entry} from "@/apis/home.js";
 import {CountTo} from '@vben/components/index'
 import * as echarts from 'echarts/core'
 import {CanvasRenderer} from 'echarts/renderers'
+import {useAppTheme} from '@vben/hooks'
 import {
   LineChart,
   GaugeChart,
@@ -96,17 +23,11 @@ import {
   CalendarComponent,
   VisualMapComponent,
 } from 'echarts/components'
-import VChart from 'vue-echarts'
+import VChart, {THEME_KEY} from 'vue-echarts'
+import MoneyRank from './modules/MoneyRank.vue'
+import {operatorColumns} from './modules/schema'
 
-// import { operatorColumns } from './modules/schema'
-import {api_entry} from '@/apis/home'
-// import { getOperatorData } from '@vben/demo/src/apis/table'
-
-const DeviceOnline = ref({
-  online: 30,
-  max: 500,
-})
-
+const {isDark} = useAppTheme();
 echarts.use([
   CanvasRenderer,
   LineChart,
@@ -135,7 +56,7 @@ const e1_option = ref({
     {
       name: 'text',
       type: 'line',
-      data: [140, 100, 170, 20],
+      data: [30, 50, 150, 200],
       smooth: true,
       itemStyle: {
         color: '#36cfc9',
@@ -165,7 +86,8 @@ const e1_option = ref({
     splitNumber: 2,
   },
 })
-const Device_chart = ref({
+
+const e2_option = ref({
   series: [
     {
       type: 'gauge',
@@ -174,7 +96,7 @@ const Device_chart = ref({
       center: ['50%', '80%'],
       radius: '100%',
       min: 0,
-      max: DeviceOnline.value.max,
+      max: 10000,
       splitNumber: 5,
       axisLine: {
         lineStyle: {
@@ -242,14 +164,14 @@ const Device_chart = ref({
       },
       data: [
         {
-          value: DeviceOnline.value.online,
-          name: '活跃设备',
+          value: 5000,
+          name: '月收入',
         },
       ],
     },
   ],
 })
-const DeviceRef = ref()
+
 const e3_option = ref({
   color: ['#afffff', '#74dbef', '#5e88fc', '#264e86'],
   title: {
@@ -300,7 +222,8 @@ const e3_option = ref({
     },
   ],
 })
-const Order_chart = ref({
+
+const e4_option = ref({
   color: ['#80FFA5', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
   grid: {
     width: '85%',
@@ -309,9 +232,10 @@ const Order_chart = ref({
     left: 40,
   },
   title: {
-    text: '订单统计',
+    text: '广告来源',
     textStyle: {
-      color: '#3b3a39',
+      color: '#6B7280',
+      fontWeight: 600,
     },
   },
   tooltip: {
@@ -409,34 +333,181 @@ const Order_chart = ref({
     },
   ],
 })
-let entry = null
+const EntryParam = ref({money_rank: 5})
+const EntryData = ref({
+  money_rank: []
+})
+let timer = null
 onMounted(() => {
-  const handleEntry = async () => {
-    const res = await api_entry()
-    DeviceOnline.value = res.device_online
-    DeviceRef.value &&
-    DeviceRef.value.setOption({
-      series: [{
-        max: DeviceOnline.value.max,
-        data: [
-          {
-            value: DeviceOnline.value.online,
-            name: '活跃设备',
-          },
-        ]
-      }],
+  console.log("EntryStart")
 
+  function Entry() {
+    console.log("Entry")
+    api_entry(unref(EntryParam)).then((val) => {
+      console.log(val)
+      EntryData.value = val
     })
-
   }
-  console.log("创建 entry")
-  handleEntry()
-  entry = setInterval(handleEntry, 5000)
+
+  timer = setInterval(Entry, 5000)
+  Entry()
+})
+onUnmounted(() => {
+  clearInterval(timer)
+  console.log("EntryEnd")
 })
 
+// 获得当前年份和月份
+function getYearMonth() {
+  let date = new Date();
+  return `${date.getFullYear()}-${date.getMonth() + 1}`
+}
 
-onBeforeUnmount(() => {
-  console.log("销毁 entry")
-  clearInterval(entry)
+// 获得最新一天数据
+// 数据格式：[['yyyy-mm-dd', 'value']]
+const getVirtualData = () => {
+  let curDate = new Date();
+  let firstDayOfMonth = new Date(curDate.getFullYear(), curDate.getMonth(), 1);
+  let days = Math.ceil((curDate - firstDayOfMonth) / (1000 * 60 * 60 * 24));
+  let data = [];
+  for (let i = 0; i <= days; i++) {
+    let date = new Date(firstDayOfMonth)
+    date.setDate(firstDayOfMonth.getDate() + i);
+    let formatDate = date.toISOString().slice(0, 10);
+    data.push([
+      formatDate,
+      Math.floor(Math.random() * 10000)
+    ])
+  }
+  return data;
+}
+
+const e6_option = ref({
+  tooltip: {},
+  backgroundColor: 'transparent',
+  calendar: {
+    top: 'middle',
+    left: 'center',
+    orient: 'vertical',
+    cellSize: 40,
+    yearLabel: {
+      margin: 50,
+      fontSize: 30,
+    },
+    dayLabel: {
+      firstDay: 1,
+      nameMap: 'cn',
+    },
+    monthLabel: {
+      nameMap: 'cn',
+      margin: 10,
+      fontSize: 20,
+      color: '#999999',
+    },
+
+    itemStyle: {
+      color: 'transparent'
+    },
+    range: getYearMonth(),
+  },
+  visualMap: {
+    min: 0,
+    max: 10000,
+    calculable: true,
+    orient: 'horizontal',
+    left: 'center',
+    bottom: '10%',
+  },
+  series: [
+    {
+      type: 'heatmap',
+      coordinateSystem: 'calendar',
+      calendarIndex: 0,
+      data: getVirtualData(),
+      // data: [['2023-08-01',30]]
+    },
+  ],
 })
 </script>
+<template>
+  <div class="bg-light-400 p-5 mx-2 flex justify-between gap-x-2 dark:bg-dark-400">
+    <div class="w-3/4 flex flex-col gap-y-5">
+      <div class="flex justify-evenly gap-x-3">
+        <div
+            class="bg-white w-1/3 h-40 rounded-md p-2 grid grid-cols-12 grid-rows-6 shadow-xl shadow-light-600 dark:bg-dark-600 dark:shadow-dark-800">
+          <p class="col-start-1 col-span-5 row-start-2 row-span-2 text-lg text-gray-500 m-auto">
+            访问量
+          </p>
+          <div class="col-start-2 col-span-3 row-start-4 row-span-2 flex items-center justify-center">
+            <CountTo :duration="1000" :endVal="200" :startVal="0" class="text-3xl" color="#595959"/>
+          </div>
+          <div class="col-start-6 col-span-7 row-start-1 row-span-6">
+            <v-chart ref="lineChart" :option="e1_option" autoresize/>
+          </div>
+        </div>
+        <div
+            class="bg-white w-1/3 h-40 rounded-md grid grid-cols-12 grid-rows-6 shadow-xl shadow-light-600 dark:bg-dark-600 dark:shadow-dark-800">
+          <p class="col-start-1 col-span-5 row-start-2 row-span-2 text-lg text-gray-400 m-auto">
+            月收入
+          </p>
+          <div class="col-start-2 col-span-3 row-start-4 row-span-2 flex items-center justify-center">
+            <CountTo
+                :decimals="2" :duration="1000" :endVal="5000" :startVal="0" class="text-3xl" color="#595959"
+                prefix="¥"/>
+          </div>
+          <div class="col-start-6 col-span-7 row-start-1 row-span-6">
+            <v-chart ref="gaugeChart" :option="e2_option" autoresize/>
+          </div>
+        </div>
+        <div
+            class="bg-white w-1/3 h-40 rounded-md grid grid-cols-12 grid-rows-6 shadow-xl shadow-light-600 dark:bg-dark-600 dark:shadow-dark-800">
+          <p class="col-start-1 col-span-5 row-start-2 row-span-2 text-lg text-gray-400 m-auto">
+            收入来源
+          </p>
+          <div class="col-start-2 col-span-3 row-start-4 row-span-2 flex items-center justify-center"></div>
+          <div class="col-start-1 col-span-12 row-start-1 row-span-6">
+            <v-chart ref="pieChart" :option="e3_option" autoresize/>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+            class="bg-white p-5 w-full h-96 rounded-md grid grid-cols-12 grid-rows-6 shadow-xl shadow-light-600 dark:bg-dark-600 dark:shadow-dark-800">
+          <div class="col-start-1 col-span-12 row-start-1 row-span-6">
+            <v-chart ref="lineCharts2" :option="e4_option" autoresize/>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+            class="bg-white w-full h-60 rounded-md grid grid-cols-12 grid-rows-6 shadow-xl shadow-light-600 dark:bg-dark-600 dark:shadow-none">
+          <div class="p-2 col-start-1 col-span-12 row-start-1 row-span-6">
+            <VbenTable
+                :columns="operatorColumns" :options="{
+              border: 'none',
+              size: 'mini',
+              stripe: true,
+              round: true,
+              maxHeight: 200,
+
+            }"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center gap-y-5 w-1/4">
+      <div
+          class="bg-white w-11/12 h-1/2 rounded-md grid p-5 grid-cols-12 grid-rows-12 shadow-xl shadow-light-600 dark:bg-dark-600 dark:shadow-dark-800">
+        <div class="col-start-1 col-span-12 row-start-1 row-span-12">
+          <MoneyRank :data="EntryData.money_rank"/>
+        </div>
+      </div>
+      <div
+          class="bg-white w-11/12 h-1/2 rounded-md grid grid-cols-12 grid-rows-12 shadow-xl shadow-light-600 dark:bg-dark-600 dark:shadow-dark-800">
+        <div class="col-start-1 col-span-12 row-start-1 row-span-12">
+          <v-chart ref="calendarChart" :option="e6_option" :theme="isDark ? 'dark' : 'light'" autoresize/>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

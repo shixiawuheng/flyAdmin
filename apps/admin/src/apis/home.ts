@@ -13,11 +13,13 @@ export interface EntryData {
 }
 
 export function api_entry(
+    params,
     mode: ErrorMessageMode = 'modal',
 ) {
     return request.get<EntryData>(
         {
             url: '/home/entry',
+            params
         },
         {
             errorMessageMode: mode,

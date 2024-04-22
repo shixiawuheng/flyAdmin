@@ -1,5 +1,14 @@
 import {VbenColumns} from "@vben/vbencomponents/src/table";
+import {useUserStore} from "@/store/user";
+import {api_status} from "@/apis/user";
 
+export const Levels = useUserStore().getLevels;
+export let Status = {};
+
+(async () => {
+    Status = await api_status();
+    console.log(Levels, Status)
+})()
 export const UserColumns: VbenColumns = [
     {
         field: 'id',
@@ -13,6 +22,7 @@ export const UserColumns: VbenColumns = [
         title: '昵称',
         align: 'center',
         width: '8%',
+        showOverflow: true,
     },
     {
         field: 'account',
@@ -25,28 +35,52 @@ export const UserColumns: VbenColumns = [
         title: '用户等级',
         align: 'center',
         width: '8%',
+        formatter: ({cellValue}) => {
+            return Levels[String(cellValue)]
+        }
     },
     {
-        field: 'level',
+        field: 'status',
         title: '用户状态',
         align: 'center',
         width: '8%',
+        formatter: ({cellValue}) => {
+            return Status[String(cellValue)]
+        }
     },
     {
         field: 'money',
         title: '余额',
         align: 'center',
         width: '8%',
+        formatter: ({cellValue}) => {
+            return String(cellValue || 0)
+        }
+    },
+    {
+        field: 'accrue',
+        title: '累积消费',
+        align: 'center',
+        width: '8%',
+        formatter: ({cellValue}) => {
+            return String(cellValue || 0)
+        }
     },
     {
         field: 'notice',
         title: '通知接口',
         align: 'center',
+        formatter: ({cellValue}) => {
+            return cellValue || '无'
+        }
     },
     {
         field: 'note',
         title: '备注',
         align: 'center',
+        formatter: ({cellValue}) => {
+            return cellValue || '无'
+        }
     },
     {
         field: 'action',

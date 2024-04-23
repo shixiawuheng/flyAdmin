@@ -1,23 +1,24 @@
-import { isObject } from 'lodash-es'
+import {isObject} from 'lodash-es'
 
 // @ts-ignore
-function NOOP() {}
+function NOOP() {
+}
 
 function openWindow(
-  url: string,
-  opt?: {
-    target?: '_self' | '_blank' | string
-    noopener?: boolean
-    noreferrer?: boolean
-  },
+    url: string,
+    opt?: {
+        target?: '_self' | '_blank' | string
+        noopener?: boolean
+        noreferrer?: boolean
+    },
 ) {
-  const { target = '__blank', noopener = true, noreferrer = true } = opt || {}
-  const feature: string[] = []
+    const {target = '__blank', noopener = true, noreferrer = true} = opt || {}
+    const feature: string[] = []
 
-  noopener && feature.push('noopener=yes')
-  noreferrer && feature.push('noreferrer=yes')
+    noopener && feature.push('noopener=yes')
+    noreferrer && feature.push('noreferrer=yes')
 
-  window.open(url, target, feature.join(','))
+    window.open(url, target, feature.join(','))
 }
 
 /**
@@ -31,31 +32,51 @@ function openWindow(
  *  ==>www.google.com?a=3&b=4
  */
 function appendUrlParams(baseUrl: string, obj: any): string {
-  let parameters = ''
-  for (const key in obj) {
-    parameters += key + '=' + encodeURIComponent(obj[key]) + '&'
-  }
-  parameters = parameters.replace(/&$/, '')
-  return /\?$/.test(baseUrl)
-    ? baseUrl + parameters
-    : baseUrl.replace(/\/?$/, '?') + parameters
+    let parameters = ''
+    for (const key in obj) {
+        parameters += key + '=' + encodeURIComponent(obj[key]) + '&'
+    }
+    parameters = parameters.replace(/&$/, '')
+    return /\?$/.test(baseUrl)
+        ? baseUrl + parameters
+        : baseUrl.replace(/\/?$/, '?') + parameters
 }
 
 function deepMerge<T = any>(src: any = {}, target: any = {}): T {
-  let key: string
-  for (key in target) {
-    src[key] =
-      isObject(src[key]) && src[key] !== null
-        ? deepMerge(src[key], target[key])
-        : (src[key] = target[key])
-  }
-  return src
+    let key: string
+    for (key in target) {
+        src[key] =
+            isObject(src[key]) && src[key] !== null
+                ? deepMerge(src[key], target[key])
+                : (src[key] = target[key])
+    }
+    return src
 }
 
 function isUrl(path: string): boolean {
-  const reg =
-    /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/
-  return reg.test(path)
+    const reg =
+        /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/
+    return reg.test(path)
 }
 
-export { isUrl, deepMerge, appendUrlParams, openWindow, NOOP }
+function filterObjectFields(obj, fieldsToKeep) {
+    return Object.fromEntries(
+        Object.entries(obj).filter(([key, value]) => fieldsToKeep.includes(key))
+    );
+}
+
+function filterObj(obj: any, filter: any = []) {
+    if (!isObject(obj)) {
+        return obj
+    }
+    Object.keys(obj).forEach((key) => {
+        if (filter.includes(key)) {
+            delete obj[key]
+        } else if (isObject(obj[key])) {
+            filterObj(obj[key], filter)
+        }
+    })
+    return obj
+}
+
+export {isUrl, deepMerge, appendUrlParams, openWindow, NOOP, filterObjectFields}

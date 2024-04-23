@@ -9,6 +9,7 @@
         :auto-resize="true"
         :scroll-y="{enabled: true, gt: 60, sItem: '.my-tr'}"
         class="my-table-list"
+        height="100%"
         v-bind="$attrs">
       <template #default="{ items }">
         <div

@@ -1,17 +1,23 @@
 <script lang="ts" setup>
-import {ref, defineExpose, reactive, unref} from 'vue'
+import {ref, defineExpose, unref} from 'vue'
 import {useForm} from "@vben/vbencomponents";
-import {AddSchemas} from "./schemas";
-import {api_create, UserData, CreateParams} from "@/apis/user";
+import {UserData, CreateParams} from "@/apis/user";
 
 
 const menuDrawerFlag = ref(false)
-const DrawerData = reactive({
-  title: '添加用户'
+const DrawerData = ref({
+  title: '添加用户',
+  model: {},
+  schemas: [],
+  submit: async function (model) {
+    return close()
+  }
 })
 
-
-function open() {
+function open(prop) {
+  DrawerData.value = prop || DrawerData.value
+  model.value = DrawerData.value.model || {}
+  setTimeout(() => updateSchemas(unref(DrawerData).schemas))
   return (menuDrawerFlag.value = true)
 }
 
@@ -19,22 +25,17 @@ function close() {
   return (menuDrawerFlag.value = false)
 }
 
-const emit = defineEmits(["success"])
 defineExpose({
   open,
   close,
 })
-const model = ref<CreateParams>({
-  account: "",
-  money: 100,
-  level: 1,
-})
+const model = ref<CreateParams>(unref(DrawerData).model)
 
 const loading = ref(true)
 
-const [menuFormReg] = useForm({
+const [menuFormReg, {updateSchemas}] = useForm({
   actions: true,
-  schemas: AddSchemas,
+  schemas: [],
   actionsProps: {
     span: 24,
     submitText: '确定',
@@ -47,11 +48,8 @@ const [menuFormReg] = useForm({
 })
 
 function submit() {
-  api_create(unref(model.value)).then((val: UserData) => {
-    // const keys = val.map(v => v.key)
-    // console.log(keys)
-    // close()
-    emit("success", val)
+  unref(DrawerData).submit(unref(model.value)).then((val: UserData) => {
+    unref(DrawerData).success(val)
   }).finally(() => loading.value = false)
 }
 </script>
@@ -65,5 +63,4 @@ function submit() {
     </VbenDrawerContent>
   </VbenDrawer>
 </template>
-
 <style lang="less" scoped></style>

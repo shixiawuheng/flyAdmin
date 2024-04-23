@@ -36,6 +36,19 @@ export function api_create(
         })
 }
 
+export function api_edit(
+    data: CreateParams,
+    mode: ErrorMessageMode = 'modal',
+) {
+    return request.post<UserData>(
+        {
+            url: '/user/edit',
+            data,
+        }, {
+            errorMessageMode: mode,
+        })
+}
+
 export function api_list(data) {
     return request.post<UserData[]>(
         {

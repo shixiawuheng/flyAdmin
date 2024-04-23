@@ -136,8 +136,8 @@ onMounted(() => {
             />
             <!-- {{ schema.gridItemProps }} -->
             <component
-v-if="schema.component === 'StrengthMeter'" v-model:value="fieldValue[schema.field]" :is="StrengthMeter"
-                       v-bind="schema.componentProps"/>
+                v-if="schema.component === 'StrengthMeter'" v-model:value="fieldValue[schema.field]" :is="StrengthMeter"
+                v-bind="schema.componentProps"/>
             <VbenInput
                 v-if="schema.component === 'InputPassword'"
                 v-model:value="fieldValue[schema.field]"

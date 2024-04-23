@@ -32,3 +32,17 @@ export function api_make(
             errorMessageMode: mode,
         })
 }
+
+export function api_list(
+    data: MakeParams,
+    mode: ErrorMessageMode = 'modal',
+) {
+    return request.post<Key[]>(
+        {
+            url: '/key/list',
+            data
+        },
+        {
+            errorMessageMode: mode,
+        })
+}

@@ -1,14 +1,15 @@
 <script lang="ts" setup>
-import {ref} from "vue";
-import CreateDraw from "./model/CreateDraw.vue";
+import {computed, ref, unref} from "vue";
+import UserDraw from "./model/UserDraw.vue";
 import CreateSuccessModal from "./model/CreateSuccessModal.vue";
-import {UserColumns} from "./schemas";
-import {api_list} from "@/apis/user"
+import {UserColumns, CreateFormSchemas, EditFormSchemas} from "./schemas";
+import {api_create, api_edit, api_list} from "@/apis/user"
 import {useTable} from "@vben/vbencomponents";
+import {filterObjectFields} from "@vben/utils";
 
-
-const Height = window.innerHeight - 165
-const CreateRef = ref()
+const rootDom = ref()
+const Height = computed(() => window.innerHeight - (rootDom.value?.getBoundingClientRect().top || 0) - 20)
+const UserRef = ref()
 const CreateSuccessRef = ref()
 const [registerTable, {reload}] = useTable({
       columnConfig: {resizable: false},
@@ -27,20 +28,49 @@ const [registerTable, {reload}] = useTable({
 
     },
 )
+let UserSuccess = function (user) {
+  UserRef.value.close()
+  CreateSuccessRef.value?.open(user)
+  reload()
+}
 const handleEdit = (row) => {
-  console.log(row)
+  UserRef.value?.open({
+    title: "编辑用户",
+    submit: api_edit,
+    schemas: EditFormSchemas,
+    success: (user) => {
+      UserRef.value.close()
+      reload()
+    },
+    model: filterObjectFields(JSON.parse(JSON.stringify(unref(row))),
+        ['id', 'account', 'name', 'level', 'status', 'rebate', 'notice', 'note'])
+  })
+}
+
+function handleCreate() {
+  UserRef.value?.open({
+    title: "添加用户",
+    submit: api_create,
+    schemas: CreateFormSchemas,
+    success: function (user) {
+      UserRef.value.close()
+      CreateSuccessRef.value?.open(user)
+      reload()
+    }
+  })
 }
 
 function CreateSuccess(user) {
-  CreateRef.value.close()
+  UserRef.value.close()
   CreateSuccessRef.value?.open(user)
   reload()
 }
 
 </script>
 <template>
-  <div style="margin: 20px">
+  <div ref="rootDom" style="margin: 20px">
     <vben-table
+        :height="`${Height}px`"
         @register="registerTable"
     >
       <template #toolbar>
@@ -51,7 +81,7 @@ function CreateSuccess(user) {
                 icon="ic:baseline-sync"
             />
           </vben-button>
-          <vben-button class="action" type="primary" @click="CreateRef?.open">添加用户</vben-button>
+          <vben-button class="action" type="primary" @click="handleCreate">添加用户</vben-button>
           <!--          <vben-button class="action" type="primary" @click="CreateRef?.open">添加用户</vben-button>-->
         </div>
       </template>
@@ -70,7 +100,7 @@ function CreateSuccess(user) {
       <!--        <slot :name="item" v-bind="data || {}"></slot>-->
       <!--      </template>-->
     </vben-table>
-    <CreateDraw ref="CreateRef" @success="CreateSuccess"/>
+    <UserDraw ref="UserRef"/>
     <CreateSuccessModal ref="CreateSuccessRef"/>
   </div>
 </template>

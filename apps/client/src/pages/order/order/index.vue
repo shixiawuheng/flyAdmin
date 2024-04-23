@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import {api_list, order, order_status} from '@/apis/order'
-import {baseColumns, status} from './schemas'
+import {baseColumns, status, types} from './schemas'
 import MenuAddDraw from './model/menuAddDraw.vue'
 import Body from './model/body.vue'
 import {msg, useTable} from "@vben/vbencomponents";
@@ -15,7 +15,13 @@ const loading = ref(false)
 const [TableRegister] = useTable({
   api: api_list,
   columns: baseColumns,
-  pagerConfig: {enabled: true},
+  pagination: {
+    loading: false,
+    size: 'small',
+    background: true,
+    pageSize: 50,
+    pageSizes: [50, 100, 200, 500, 1000],
+  },
   // mouseConfig: {selected: true, area: true, extension: true},
   border: 'full',
   rowConfig: {isHover: true},
@@ -23,6 +29,8 @@ const [TableRegister] = useTable({
   showOverflow: true,
   scrollY: {enabled: true, gt: 50}
 })
+const rootDom = ref()
+const Height = computed(() => window.innerHeight - (rootDom.value?.getBoundingClientRect().top || 0) - 20)
 const menuAddDrawRef = ref()
 const menuMakeDrawRef = ref()
 const BodyRef = ref()
@@ -57,13 +65,14 @@ function handleMake() {
 }
 
 function handleCopy(row) {
-  writeTextToClipboard(row.id)
-  msg.success("复制成功")
+  // writeTextToClipboard(row.id)
+  // types[row.type]
+  // msg.success("复制成功")
 }
 
 </script>
 <template>
-  <div style="height: 100%">
+  <div ref="rootDom" style="height: 100%">
     <VbenGrid :cols="12" :x-gap="8" :y-gap="12" style="padding: 20px">
       <!--    <VbenGridItem :span="12">-->
       <!--      <VbenCard :bordered="false" embedded>-->
@@ -78,8 +87,8 @@ function handleCopy(row) {
       <VbenGridItem :span="12">
         <VbenTable
             ref="tableRef"
+            :height="`${Height}px`"
             :loading="loading"
-            height="1000px"
             @register="TableRegister"
         >
           <template #toolbar>

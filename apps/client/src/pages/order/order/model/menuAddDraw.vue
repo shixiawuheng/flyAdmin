@@ -125,8 +125,8 @@ function handlePost() {
   loading.value = true
   api_create(type, body).then((order) => {
     if (!(Info && IndexType)) return;
-    // Info.money -= order.count * IndexType?.money
-    // UserStore.setUserInfo(Info)
+    Info.money -= order.count * GetPrice()
+    UserStore.setUserInfo(Info)
     emit("success", order)
   }).finally(() => loading.value = false)
 }
@@ -179,9 +179,9 @@ function handleDropEnter(e) {
   e.preventDefault();
 }
 
-const GetPrice = computed(() => {
+const GetPrice = () => {
   return Math.ceil((IndexType?.money || 0) * (Info?.rebate || 0))
-})
+}
 
 </script>
 <template>
@@ -199,7 +199,7 @@ const GetPrice = computed(() => {
         </vben-form-item>
         <vben-form-item v-show="model.type" :show-label="false" class="enter-x" inline>
           <vben-alert type="warning">
-            <pre style="margin-top: -2px;margin-bottom: 0">{{ model.note }}</pre>
+            <pre style="margin-top: -2px;margin-bottom: 0">单价：{{ GetPrice() }} ==>{{ model.note }}</pre>
           </vben-alert>
         </vben-form-item>
         <vben-form-item
@@ -231,7 +231,7 @@ const GetPrice = computed(() => {
           :data="success"
           :loading="loading"
           :money="Info?.money"
-          :price="GetPrice"
+          :price="GetPrice()"
           @success="handlePost"/>
       <errorList v-if="step==='error'" :data="error" :loading="loading" @success="ShowSuccess"/>
     </VbenDrawerContent>
